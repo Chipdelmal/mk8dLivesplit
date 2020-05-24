@@ -2,6 +2,7 @@
 import xmltodict
 import functions as fun
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 
 (PATH, FILE) = (
@@ -16,14 +17,21 @@ doc['Run']
 gameName = doc['Run']['GameName']
 segment = doc['Run']['Segments']['Segment']
 
+len(segment)
 
-track = 47
-(tName, timesHistory) = (segment[track]['Name'], [])
-for hist in segment[track]['SegmentHistory']['Time']:
-    if len(hist) > 1:
-        tStr = hist['RealTime']
-        trackTiming = datetime.strptime(tStr[:-1], '%H:%M:%S.%f')
-        tDiff = fun.tdToSec(trackTiming - fun.REFT)
-        timesHistory.append(tDiff)
+(tNames, tHists) = ([], [])
+for track in range(len(segment)):
+    (tName, tHistory) = fun.getTrackHistory(segment[track])
+    (tNames.append(tName), tHists.append(tHistory))
 
-timesHistory
+
+# Create a figure instance
+fig = plt.figure()
+# Create an axes instance
+ax = fig.add_axes([0, 0, 1, 1])
+ax.set_ylim(80, 150)
+ax.set_xticks(range(1, len(tNames) + 1))
+ax.set_xticklabels(tNames, rotation=90)
+# Create the boxplot
+bp = ax.violinplot(tHists)
+plt.show()
