@@ -1,3 +1,6 @@
+# Media
+*.png
+
 # Data and images
 *.csv
 *.pdf
