@@ -18,3 +18,7 @@ def getTrackHistory(segmentTrack):
             tDiff = tdToSec(trackTiming - REFT)
             timesHistory.append(tDiff)
     return (tName, timesHistory)
+
+
+def scaleDevs(x, tDevs):
+    return (x - min(tDevs)) / (max(tDevs) - min(tDevs))
