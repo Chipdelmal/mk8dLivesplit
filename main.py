@@ -52,7 +52,7 @@ ax.grid(which='major', alpha=.5)
 # plt.ylabel('Seconds')
 plt.xticks(fontsize=25)
 plt.yticks(fontsize=25, rotation=0)
-plt.title('Time Distributions (seconds)', fontsize=50)
+plt.title('Time Distributions (minutes)', fontsize=50)
 
 # Create the boxplot
 bp = ax.violinplot(tHists, widths=1, showmedians=True, showmeans=False, showextrema=False)
@@ -61,10 +61,15 @@ for (i, vElement) in enumerate(bp['bodies']):
     vElement.set_alpha(.25)
     # vElement.set_edgecolor((0, 0, 0))
     vElement.set_linewidth(3)
-
 vp = bp['cmedians']
 vp.set_edgecolor((.3, .3, .3))
-vp.set_linewidth(2)
-vp.set_alpha(.75)
+vp.set_linewidth(3)
+vp.set_alpha(.8)
+label = "[Min: {:.2f}, Median: {:.2f}, Max: {:.2f}]".format(tStats[0], tStats[1], tStats[2])
+plt.text(
+        .5, .975, label, fontsize=25,
+        horizontalalignment='center', verticalalignment='center',
+        transform=ax.transAxes
+    )
 
 fig.savefig('./img/violin.png', pad_inches=.1, bbox_inches="tight", dpi=250)
