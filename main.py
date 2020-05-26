@@ -32,7 +32,7 @@ for track in range(len(segment)):
     tMax.append(max(tHistory))
 tStats = [sum(tMin) / 60, sum(tMedian) / 60, sum(tMax) / 60]
 
-baseColor = (0, 0, .75)
+baseColor = (0, .3, .75)
 colors = [(fun.scaleDevs(dev, tDevs)/1.25, baseColor[1], baseColor[2], .5) for dev in tDevs]
 
 # Create a figure instance
