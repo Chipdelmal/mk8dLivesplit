@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 (PATH, FILE) = (
         '/home/chipdelmal/Documents/Github/MarioKart8DeluxeSpeedruns/Splits/',
-        '05 - Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
+        '06 - Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
     )
 
 with open(PATH+FILE) as fd:
@@ -21,16 +21,17 @@ segment = doc['Run']['Segments']['Segment']
 
 len(segment)
 
-(tNames, tHists, tDevs, tMin, tMedian, tMax) = ([], [], [], [], [], [])
+(tNames, tHists, tDevs, tMin, tMedian, tMean, tMax) = ([], [], [], [], [], [], [])
 for track in range(len(segment)):
     (tName, tHistory) = fun.getTrackHistory(segment[track])
     tNames.append(tName)
     tHists.append(tHistory)
     tDevs.append(stats.stdev(tHistory))
     tMin.append(min(tHistory))
+    tMean.append(stats.mean(tHistory))
     tMedian.append(stats.median(tHistory))
     tMax.append(max(tHistory))
-tStats = [sum(tMin) / 60, sum(tMedian) / 60, sum(tMax) / 60]
+tStats = [sum(tMin) / 60, sum(tMedian) / 60, sum(tMax) / 60, sum(tMean) / 60,]
 
 baseColor = (0, .3, .75)
 colors = [(fun.scaleDevs(dev, tDevs)/1.25, baseColor[1], baseColor[2], .5) for dev in tDevs]
@@ -65,7 +66,7 @@ vp = bp['cmedians']
 vp.set_edgecolor((.3, .3, .3))
 vp.set_linewidth(3)
 vp.set_alpha(.8)
-label = "[Min: {:.2f}, Median: {:.2f}, Max: {:.2f}]".format(tStats[0], tStats[1], tStats[2])
+label = "[Min: {:.2f}, Mean: {:.2f}, Median: {:.2f}, Max: {:.2f}]".format(tStats[0], tStats[3], tStats[1], tStats[2])
 plt.text(
         .5, .975, label, fontsize=25,
         horizontalalignment='center', verticalalignment='center',
