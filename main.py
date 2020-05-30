@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 (PATH, FILE) = (
         '/home/chipdelmal/Documents/Github/MarioKart8DeluxeSpeedruns/Splits/',
-        '06 - Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
+        '07 - Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
     )
 
 with open(PATH+FILE) as fd:
@@ -31,7 +31,8 @@ for track in range(len(segment)):
     tMean.append(stats.mean(tHistory))
     tMedian.append(stats.median(tHistory))
     tMax.append(max(tHistory))
-tStats = [sum(tMin) / 60, sum(tMedian) / 60, sum(tMax) / 60, sum(tMean) / 60,]
+tStats = [sum(tMin)/60, sum(tMedian)/60, sum(tMax)/60, sum(tMean)/60]
+
 
 baseColor = (0, .3, .75)
 colors = [(fun.scaleDevs(dev, tDevs)/1.25, baseColor[1], baseColor[2], .5) for dev in tDevs]
