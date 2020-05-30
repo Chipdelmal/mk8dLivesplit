@@ -54,7 +54,7 @@ ax.grid(which='major', alpha=.5)
 # plt.ylabel('Seconds')
 plt.xticks(fontsize=25)
 plt.yticks(fontsize=25, rotation=0)
-plt.title('Time Distributions (minutes)', fontsize=50)
+plt.title('Time Distributions', fontsize=50)
 
 # Create the boxplot
 bp = ax.violinplot(tHists, widths=1, showmedians=True, showmeans=False, showextrema=False)
