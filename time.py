@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 
 (PATH, FILE) = (
-        '/home/chipdelmal/Documents/Github/MarioKart8DeluxeSpeedruns/Splits/',
-        '08 - Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
+        './dta/',
+        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
     )
 
 with open(PATH+FILE) as fd:
@@ -24,7 +24,7 @@ fig = plt.figure(figsize=(24, 12))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.plot(
         list(zip(*cTimes)),
-        linewidth=.5,
+        linewidth=.25,
         color=(.3, .3, .9, .5)
     )
 ax.violinplot(

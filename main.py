@@ -4,8 +4,8 @@ import functions as fun
 
 
 (PATH, FILE) = (
-        '/home/chipdelmal/Documents/Github/MarioKart8DeluxeSpeedruns/Splits/',
-        '09 - Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
+        './dta/',
+        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
     )
 
 with open(PATH+FILE) as fd:
