@@ -27,6 +27,12 @@ ax = fig.add_axes([0, 0, 1, 1])
 traces = [i[0] - i[1] for i in zip(cTimesT, means)]
 colors = pl.cm.Purples(np.linspace(.05, .95, 1 + len(traces[0])))
 
+zero = np.zeros(len(traces[0]))
+traces.insert(0, zero)
+means.insert(0, 0)
+cTimesT.insert(0, zero)
+names.insert(0, 'Start')
+
 for (i, trace) in enumerate(list(zip(*traces))):
     ax.plot(
             trace,
@@ -36,7 +42,7 @@ for (i, trace) in enumerate(list(zip(*traces))):
 bp = ax.violinplot(
         [i[0] - i[1] for i in zip(cTimesT, means)],
         widths=.75, showmedians=False, showmeans=True, showextrema=False,
-        positions=range(0, len(cTimes[0]))
+        positions=range(0, len(cTimes[0])+1)
     )
 for (i, vElement) in enumerate(bp['bodies']):
     vElement.set_facecolor((0, 0, 1, .5))
@@ -46,27 +52,25 @@ vp = bp['cmeans']
 vp.set_edgecolor((.3, .3, .3))
 vp.set_linewidth(3)
 vp.set_alpha(.8)
-major_ticks = range(0, 48, 1)
+major_ticks = range(0, len(means), 1)
 ax.set_ylim(-1.5, 1.5)
 ax.grid(which='both')
 ax.set_xticks(major_ticks)
 ax.grid(which='major', alpha=.5)
-ax.set_xticklabels(['{} [{}]'.format(i[1], '%05.2f' % i[0])
-                   for i in zip(means, names)], rotation=90)
+ax.set_xticklabels(
+        ['{} [{}]'.format(i[1], '%05.2f' % i[0]) for i in zip(means, names)],
+        rotation=90
+    )
 plt.xticks(fontsize=22.5)
 plt.yticks(fontsize=22.5, rotation=0)
 plt.title('Run Time Distributions', fontsize=50)
 for (i, y) in enumerate(list(traces[-1])):
-    x = 47.25
+    x = len(means) - .6
     if i % 2 == 1:
-        x = 47.25
+        x = x + 0
     plt.text(
-            x, y, '%05.2f' % fSplit[i], fontsize=6.5,
+            x, round(y, 2), '%05.2f' % fSplit[i], fontsize=6,
             horizontalalignment='left', verticalalignment='center',
-            color=colors[i], rotation=25
+            color=colors[i], rotation=0
         )
 fig.savefig('./img/times.png', pad_inches=.1, bbox_inches="tight", dpi=400)
-#
-# zero=[np.zeros(len(traces[0]))]
-# zero.extend(traces)
-# zero
