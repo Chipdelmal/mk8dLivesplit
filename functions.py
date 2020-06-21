@@ -117,7 +117,7 @@ def plotTimings(tStats, bc=(0, .3, .75)):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(3)
     vp.set_alpha(.8)
-    label = "[Min: {:.2f}, Mean: {:.2f}, Median: {:.2f}, Max: {:.2f}]".format(
+    label = "Total: [Min: {:.2f}, Mean: {:.2f}, Median: {:.2f}, Max: {:.2f}]".format(
             tStats['min'], tStats['mean'], tStats['median'], tStats['max']
         )
     plt.text(
