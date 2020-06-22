@@ -79,20 +79,21 @@ def getSegmentStats(doc):
     return tStats
 
 
-def plotTimings(tStats, bc=(0, .3, .75)):
+def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     (tHists, tDevs, tNames) = (
             tStats['hist'], tStats['sd'], tStats['names']
         )
+    entries = len(tNames)
     colors = [(scaleDevs(dev, tDevs)/1.25, bc[1], bc[2], .5) for dev in tDevs]
     # Create a figure instance
     fig = plt.figure(figsize=(24, 12))
     # Create an axes instance
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_ylim(80, 150)
+    ax.set_ylim(ylim[0], ylim[1])
     ax.set_xticks(range(1, len(tNames) + 1))
     ax.set_xticklabels(tNames, rotation=90)
-    major_ticks = range(1, 48+1, 1)
-    minor_ticks = range(1, 48+1, 4)
+    major_ticks = range(1, entries+1, 1)
+    minor_ticks = range(1, entries+1, 4)
     ax.grid(which='both')
     ax.set_xticks(major_ticks)
     ax.set_xticks(minor_ticks, minor=True)
@@ -101,7 +102,8 @@ def plotTimings(tStats, bc=(0, .3, .75)):
     # plt.ylabel('Seconds')
     plt.xticks(fontsize=22.5)
     plt.yticks(fontsize=22.5, rotation=0)
-    plt.title('Splits Time Distributions', fontsize=50)
+    plt.ylabel('Duration (seconds)', fontsize=50)
+    plt.title('Split Time Distributions', fontsize=75)
 
     # Create the boxplot
     bp = ax.violinplot(
