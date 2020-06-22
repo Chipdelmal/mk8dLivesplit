@@ -75,4 +75,4 @@ for (i, y) in enumerate(list(traces[-1])):
             horizontalalignment='left', verticalalignment='center',
             color=colors[i], rotation=0
         )
-fig.savefig('./img/times.png', pad_inches=.1, bbox_inches="tight", dpi=500)
+fig.savefig('./img/times.png', pad_inches=.1, bbox_inches="tight", dpi=250)

@@ -12,4 +12,4 @@ with open(PATH+FILE) as fd:
     doc = xmltodict.parse(fd.read())
 tStats = fun.getSegmentStats(doc)
 fig = fun.plotTimings(tStats)
-fig.savefig('./img/violin.png', pad_inches=.1, bbox_inches="tight", dpi=500)
+fig.savefig('./img/violin.png', pad_inches=.1, bbox_inches="tight", dpi=250)

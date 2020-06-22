@@ -18,14 +18,6 @@ Shows all the finished splits in one plot.
 <img src="https://chipdelmal.github.io/blog/uploads/mku_times.png" style="width:100%;">
 
 
-## Other
-
-Code for me to remember how to launch the VNC to track the splits on my laptop:
-
-```
-x0vncserver -passwordfile ~/.vnc/passwd -display :0
-```
-
 #  Author
 
 <img src="https://raw.githubusercontent.com/Chipdelmal/WaveArt/master/media/pusheen.jpg" height="130px" align="middle"><br>
