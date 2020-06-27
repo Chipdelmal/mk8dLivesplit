@@ -108,3 +108,4 @@ def plotTraces(traces, fSplit, cTimes, cTimesT, means, names):
                 horizontalalignment='left', verticalalignment='center',
                 color=colors[i], rotation=0
             )
+    return fig
