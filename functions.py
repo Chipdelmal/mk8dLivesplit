@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 REFT = datetime(1900, 1, 1, 0, 0, 0, 0)
 
 
+def ceilFloat(x, prec=2, base=.5):
+    return round(base * round(float(x)/base), prec) + base
+
+
 def tdToSec(tDelta):
     micro = 1000000
     tm = (tDelta.seconds) + (tDelta.microseconds / micro)
@@ -28,8 +32,8 @@ def scaleDevs(x, tDevs):
 
 def getEndRunIds(segment):
     endTimesDict = segment[-1]['SegmentHistory']['Time']
-    endRunIds = [ts['@id'] for ts in endTimesDict]
-    return set(endRunIds)
+    endRunIds = [int(ts['@id']) for ts in endTimesDict]
+    return [i for i in endRunIds if i > 0]
 
 
 def timeToSecs(tStr, refTime=REFT):
@@ -42,7 +46,7 @@ def filterFinishedSegments(track, endRId, reft=REFT):
     trackSplits = []
     segHist = track['SegmentHistory']['Time']
     for rHist in segHist:
-        if rHist['@id'] in endRId:
+        if int(rHist['@id']) in endRId:
             splitTime = timeToSecs(rHist['RealTime'])
             trackSplits.append(splitTime)
     return trackSplits
@@ -54,7 +58,7 @@ def finishedRunsTimes(segment):
     for segmentTrack in segment:
         fTime = filterFinishedSegments(segmentTrack, endRId, reft=REFT)
         fRun.append(fTime)
-    return (list(zip(*fRun)))
+    return list(zip(*fRun))
 
 
 def getSegmentStats(doc):
@@ -107,7 +111,7 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
 
     # Create the boxplot
     bp = ax.violinplot(
-            tHists, widths=1, showmedians=True, showmeans=False,
+            tHists, widths=.9, showmedians=True, showmeans=False,
             showextrema=False
         )
     for (i, vElement) in enumerate(bp['bodies']):

@@ -4,6 +4,9 @@ import xmltodict
 import functions as fun
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pl
+from datetime import timedelta
+import math
+
 
 
 (PATH, FILE) = (
@@ -14,8 +17,15 @@ import matplotlib.pylab as pl
 with open(PATH+FILE) as fd:
     doc = xmltodict.parse(fd.read())
 
+
+doc['Run']['Segments']['Segment'][9]
+
+
 segment = doc['Run']['Segments']['Segment']
 fTimes = fun.finishedRunsTimes(segment)
+# [str(i)+':'+str(len(j)) for (i, j) in enumerate(fTimes)]
+
+
 cTimes = [np.cumsum(i)/60 for i in fTimes]
 cTimesT = list(zip(*cTimes))
 means = [np.mean(i) for i in cTimesT]
@@ -28,11 +38,11 @@ means.insert(0, 0)
 cTimesT.insert(0, zero)
 names.insert(0, 'Start')
 
-
 fig = plt.figure(figsize=(24, 12))
 ax = fig.add_axes([0, 0, 1, 1])
 colors = pl.cm.Purples(np.linspace(.05, .95, 1 + len(traces[0])))
 
+yRange = fun.ceilFloat(max(abs(traces[-1])))
 
 for (i, trace) in enumerate(list(zip(*traces))):
     ax.plot(
@@ -54,9 +64,9 @@ vp.set_edgecolor((.3, .3, .3))
 vp.set_linewidth(3)
 vp.set_alpha(.8)
 major_ticks = range(0, len(means), 1)
-ax.set_ylim(-1.5, 1.5)
 ax.grid(which='both')
 ax.set_xticks(major_ticks)
+ax.set_yticks([.5 * i for i in range(-4, 4, 1)])
 ax.grid(which='major', alpha=.5)
 ax.set_xticklabels(
         ['{} [{}]'.format(i[1], '%05.2f' % i[0]) for i in zip(means, names)],
@@ -64,14 +74,16 @@ ax.set_xticklabels(
     )
 plt.xticks(fontsize=22.5)
 plt.yticks(fontsize=22.5, rotation=0)
-plt.ylabel('Deviation from Median (minutes)', fontsize=50)
+plt.ylabel('Deviation from Mean (minutes)', fontsize=50)
+ax.set_ylim(-yRange, yRange)
 plt.title('Run Time Distributions', fontsize=75)
 for (i, y) in enumerate(list(traces[-1])):
     x = len(means) - .6
     if i % 2 == 1:
         x = x + 0
     plt.text(
-            x, round(y, 2), '%05.2f' % fSplit[i], fontsize=6,
+            x, round(y, 4), str(timedelta(minutes=fSplit[i]))[:-4],
+            fontsize=9,
             horizontalalignment='left', verticalalignment='center',
             color=colors[i], rotation=0
         )
