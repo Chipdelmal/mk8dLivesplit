@@ -22,5 +22,5 @@ tracesDta = fun.getSegmentTraces(doc)
         tracesDta['final'], tracesDta['cumTimes'],
         tracesDta['cumTimesT'], tracesDta['deviance']
     )
-fig = plot.plotTraces(traces, fSplit, cTimes, cTimesT, means, names)
+fig = plot.plotTraces(traces, fSplit, cTimes, cTimesT, means, names, yRange=1)
 fig.savefig('./img/times.png', pad_inches=.1, bbox_inches="tight", dpi=250)

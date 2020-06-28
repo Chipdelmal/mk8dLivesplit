@@ -2,9 +2,13 @@
 import numpy as np
 import statistics as stats
 from datetime import datetime
-
+from datetime import timedelta
 
 REFT = datetime(1900, 1, 1, 0, 0, 0, 0)
+
+
+def minsToHr(mins, prec=-4):
+    return str(timedelta(minutes=mins))[:prec]
 
 
 def ceilFloat(x, prec=2, base=.5):
@@ -34,7 +38,7 @@ def scaleDevs(x, tDevs):
 def getEndRunIds(segment):
     endTimesDict = segment[-1]['SegmentHistory']['Time']
     endRunIds = [int(ts['@id']) for ts in endTimesDict]
-    return [i for i in endRunIds if i > 0]
+    return [i for i in endRunIds if i > 1]
 
 
 def timeToSecs(tStr, refTime=REFT):

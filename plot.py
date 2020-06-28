@@ -34,7 +34,7 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
 
     # Create the boxplot
     bp = ax.violinplot(
-            tHists, widths=.9, showmedians=True, showmeans=False,
+            tHists, widths=.9, showmedians=True, showmeans=True,
             showextrema=False
         )
     for (i, vElement) in enumerate(bp['bodies']):
@@ -46,8 +46,14 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(3)
     vp.set_alpha(.8)
-    label = "Total: [Min: {:.2f}, Mean: {:.2f}, Median: {:.2f}, Max: {:.2f}]".format(
-            tStats['min'], tStats['mean'], tStats['median'], tStats['max']
+    vp = bp['cmeans']
+    vp.set_edgecolor((.3, .3, .3))
+    vp.set_linewidth(.75)
+    vp.set_alpha(.75)
+    tSts = (tStats['min'], tStats['mean'], tStats['median'], tStats['max'])
+    tms = [fun.minsToHr(i, prec=-7) for i in tSts]
+    label = "Total: [Min: {}, Mean: {}, Median: {}, Max: {}]".format(
+            tms[0], tms[1], tms[2], tms[3]
         )
     plt.text(
             .5, .975, label, fontsize=25,
@@ -57,11 +63,11 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     return fig
 
 
-def plotTraces(traces, fSplit, cTimes, cTimesT, means, names):
+def plotTraces(traces, fSplit, cTimes, cTimesT, means, names, yRange=1):
     fig = plt.figure(figsize=(24, 12))
     ax = fig.add_axes([0, 0, 1, 1])
     colors = pl.cm.Purples(np.linspace(.05, .95, 1 + len(traces[0])))
-    yRange = fun.ceilFloat(max(abs(traces[-1])))
+    # yRange = fun.ceilFloat(max(abs(traces[-1])))
     # Plot traces -------------------------------------------------------------
     for (i, trace) in enumerate(list(zip(*traces))):
         ax.plot(
@@ -72,7 +78,7 @@ def plotTraces(traces, fSplit, cTimes, cTimesT, means, names):
     # Plot violins ------------------------------------------------------------
     bp = ax.violinplot(
             [i[0] - i[1] for i in zip(cTimesT, means)],
-            widths=.75, showmedians=True, showmeans=False, showextrema=False,
+            widths=.75, showmedians=True, showmeans=True, showextrema=False,
             positions=range(0, len(cTimes[0])+1)
         )
     for (i, vElement) in enumerate(bp['bodies']):
@@ -83,6 +89,10 @@ def plotTraces(traces, fSplit, cTimes, cTimesT, means, names):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(3)
     vp.set_alpha(.8)
+    vp = bp['cmeans']
+    vp.set_edgecolor((.3, .3, .3))
+    vp.set_linewidth(.75)
+    vp.set_alpha(.75)
     # Grids and labels --------------------------------------------------------
     major_ticks = range(0, len(means), 1)
     ax.grid(which='both')
