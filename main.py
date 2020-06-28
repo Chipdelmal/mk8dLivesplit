@@ -2,6 +2,7 @@
 import plot
 import xmltodict
 import functions as fun
+import matplotlib.pylab as pl
 
 
 (PATH, FILE) = (
@@ -16,11 +17,14 @@ tStats = fun.getSegmentStats(doc)
 fig = plot.plotTimings(tStats)
 fig.savefig('./img/violin.png', pad_inches=.1, bbox_inches="tight", dpi=250)
 # Traces ######################################################################
-tracesDta = fun.getSegmentTraces(doc)
+tracesDta = fun.getSegmentTraces(doc, skip=1)
 (names, means, fSplit, cTimes, cTimesT, traces) = (
         tracesDta['names'], tracesDta['means'],
         tracesDta['final'], tracesDta['cumTimes'],
         tracesDta['cumTimesT'], tracesDta['deviance']
     )
-fig = plot.plotTraces(traces, fSplit, cTimes, cTimesT, means, names, yRange=1)
+fig = plot.plotTraces(
+        traces, fSplit, cTimes, cTimesT, means, names,
+        yRange=1, cmap=pl.cm.BuPu
+    )
 fig.savefig('./img/times.png', pad_inches=.1, bbox_inches="tight", dpi=250)

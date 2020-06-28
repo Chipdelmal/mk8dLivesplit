@@ -21,10 +21,10 @@ def tdToSec(tDelta):
     return tm
 
 
-def getTrackHistory(segmentTrack):
+def getTrackHistory(segmentTrack, skip=0):
     (tName, timesHistory) = (segmentTrack['Name'], [])
     for hist in segmentTrack['SegmentHistory']['Time']:
-        if len(hist) > 1:
+        if (len(hist) > 1) and (int(hist['@id']) > skip):
             tStr = hist['RealTime']
             tDiff = timeToSecs(tStr, refTime=REFT)
             timesHistory.append(tDiff)
@@ -35,10 +35,10 @@ def scaleDevs(x, tDevs):
     return (x - min(tDevs)) / (max(tDevs) - min(tDevs))
 
 
-def getEndRunIds(segment):
+def getEndRunIds(segment, skip=0):
     endTimesDict = segment[-1]['SegmentHistory']['Time']
     endRunIds = [int(ts['@id']) for ts in endTimesDict]
-    return [i for i in endRunIds if i > 1]
+    return [i for i in endRunIds if (i > skip)]
 
 
 def timeToSecs(tStr, refTime=REFT):
@@ -57,8 +57,8 @@ def filterFinishedSegments(track, endRId, reft=REFT):
     return trackSplits
 
 
-def finishedRunsTimes(segment):
-    endRId = getEndRunIds(segment)
+def finishedRunsTimes(segment, skip=0):
+    endRId = getEndRunIds(segment, skip=skip)
     fRun = []
     for segmentTrack in segment:
         fTime = filterFinishedSegments(segmentTrack, endRId, reft=REFT)
@@ -66,13 +66,13 @@ def finishedRunsTimes(segment):
     return list(zip(*fRun))
 
 
-def getSegmentStats(doc):
+def getSegmentStats(doc, skip=0):
     segment = doc['Run']['Segments']['Segment']
     (tNames, tHists, tDevs, tMin, tMedian, tMean, tMax) = (
             [], [], [], [], [], [], []
         )
     for track in range(len(segment)):
-        (tName, tHistory) = getTrackHistory(segment[track])
+        (tName, tHistory) = getTrackHistory(segment[track], skip=skip)
         tNames.append(tName)
         tHists.append(tHistory)
         tDevs.append(stats.stdev(tHistory))
@@ -88,9 +88,9 @@ def getSegmentStats(doc):
     return tStats
 
 
-def getSegmentTraces(doc):
+def getSegmentTraces(doc, skip=0):
     segment = doc['Run']['Segments']['Segment']
-    fTimes = finishedRunsTimes(segment)
+    fTimes = finishedRunsTimes(segment, skip=skip)
     cTimes = [np.cumsum(i)/60 for i in fTimes]
     cTimesT = list(zip(*cTimes))
     means = [np.mean(i) for i in cTimesT]

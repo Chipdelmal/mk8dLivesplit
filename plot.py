@@ -17,6 +17,7 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     # Create an axes instance
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_ylim(ylim[0], ylim[1])
+    # ax.set_xlim(-1, len(tNames) + 2)
     ax.set_xticks(range(1, len(tNames) + 1))
     ax.set_xticklabels(tNames, rotation=90)
     major_ticks = range(1, entries+1, 1)
@@ -63,17 +64,20 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     return fig
 
 
-def plotTraces(traces, fSplit, cTimes, cTimesT, means, names, yRange=1):
+def plotTraces(
+            traces, fSplit, cTimes, cTimesT, means, names, yRange=1,
+            cmap=pl.cm.Purples
+        ):
     fig = plt.figure(figsize=(24, 12))
     ax = fig.add_axes([0, 0, 1, 1])
-    colors = pl.cm.Purples(np.linspace(.05, .95, 1 + len(traces[0])))
+    colors = cmap(np.linspace(.025, .975, 1 + len(traces[0])))
     # yRange = fun.ceilFloat(max(abs(traces[-1])))
     # Plot traces -------------------------------------------------------------
     for (i, trace) in enumerate(list(zip(*traces))):
         ax.plot(
                 trace,
-                linewidth=1.5, marker='.', markersize=0,
-                color=colors[i], alpha=.75
+                linewidth=1.75, marker='.', markersize=0,
+                color=colors[i], alpha=.5
             )
     # Plot violins ------------------------------------------------------------
     bp = ax.violinplot(
@@ -104,6 +108,7 @@ def plotTraces(traces, fSplit, cTimes, cTimesT, means, names, yRange=1):
             rotation=90
         )
     ax.set_ylim(-yRange, yRange)
+    ax.set_xlim(-2, len(cTimesT) + 2)
     plt.xticks(fontsize=22.5)
     plt.yticks(fontsize=22.5, rotation=0)
     plt.ylabel('Deviation from Mean (minutes)', fontsize=50)
@@ -114,7 +119,7 @@ def plotTraces(traces, fSplit, cTimes, cTimesT, means, names, yRange=1):
             x = x + 0
         plt.text(
                 x, round(y, 4), str(timedelta(minutes=fSplit[i]))[:-4],
-                fontsize=9,
+                fontsize=13,
                 horizontalalignment='left', verticalalignment='center',
                 color=colors[i], rotation=0
             )
