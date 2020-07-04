@@ -5,11 +5,11 @@ import functions as fun
 import matplotlib.pylab as pl
 
 
-(PATH, FILE, OUT) = (
-        './dta/',
-        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss',
-        '/home/chipdelmal/MEGAsync/MK8D/'
+(PATH, OUT, FILE) = (
+        './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
+        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Cartridge, No Items).lss'
     )
+(DPI, PAD, TYP) = (250, .1, 'png')
 # Parse XML ###################################################################
 with open(PATH+FILE) as fd:
     doc = xmltodict.parse(fd.read())
@@ -17,8 +17,8 @@ with open(PATH+FILE) as fd:
 tStats = fun.getSegmentStats(doc)
 fig = plot.plotTimings(tStats)
 fig.savefig(
-        OUT+'violin.png',
-        pad_inches=.1, bbox_inches="tight", dpi=250
+        '{}violin.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Traces ######################################################################
 tracesDta = fun.getSegmentTraces(doc, skip=1)
@@ -32,8 +32,19 @@ fig = plot.plotTraces(
         yRange=1, cmap=pl.cm.Purples
     )
 fig.savefig(
-        OUT+'times.png',
-        pad_inches=.1, bbox_inches="tight", dpi=250
+        '{}times.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Timings Table ###############################################################
 catDicts = fun.timesForCategories(doc)
+catKeys = list(catDicts.keys())
+rowNum = len(catDicts.get('48 Tracks'))
+
+head = ['Run']
+head.extend(range(rowNum))
+table = [head]
+for i in catKeys:
+    rHead = [i]
+    rHead.extend(catDicts.get(i))
+    table.append(rHead)
+table
