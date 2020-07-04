@@ -51,16 +51,16 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(.75)
     vp.set_alpha(.75)
-    tSts = (tStats['min'], tStats['mean'], tStats['median'], tStats['max'])
-    tms = [fun.minsToHr(i, prec=-7) for i in tSts]
-    label = "Total: [Min: {}, Mean: {}, Median: {}, Max: {}]".format(
-            tms[0], tms[1], tms[2], tms[3]
-        )
-    plt.text(
-            .5, .975, label, fontsize=25,
-            horizontalalignment='center', verticalalignment='center',
-            transform=ax.transAxes
-        )
+    # tSts = (tStats['min'], tStats['mean'], tStats['median'], tStats['max'])
+    # tms = [fun.minsToHr(i, prec=-7) for i in tSts]
+    # label = "Total: [Min: {}, Mean: {}, Median: {}, Max: {}]".format(
+    #         tms[0], tms[1], tms[2], tms[3]
+    #     )
+    # plt.text(
+    #         .5, .975, label, fontsize=40,
+    #         horizontalalignment='center', verticalalignment='center',
+    #         transform=ax.transAxes, color=(0, 0, 0, .25)
+    #     )
     return fig
 
 
@@ -68,15 +68,24 @@ def plotTraces(
             traces, fSplit, cTimes, cTimesT, means, names, yRange=1,
             cmap=pl.cm.Purples
         ):
+    # Stats ...................................................................
+    tSts = (
+            np.min(fSplit), np.mean(fSplit),
+            np.median(fSplit), np.max(fSplit)
+        )
+    tms = [fun.minsToHr(i, prec=-4) for i in tSts]
+    labelMean = "{}".format(tms[1])
+    labelMedian = "{}".format(tms[2])
+    # Fig ---------------------------------------------------------------------
     fig = plt.figure(figsize=(24, 12))
     ax = fig.add_axes([0, 0, 1, 1])
-    colors = cmap(np.linspace(.025, .975, 1 + len(traces[0])))
+    colors = cmap(np.linspace(.05, 1, 1 + len(traces[0])))
     # yRange = fun.ceilFloat(max(abs(traces[-1])))
     # Plot traces -------------------------------------------------------------
     for (i, trace) in enumerate(list(zip(*traces))):
         ax.plot(
                 trace,
-                linewidth=1.75, marker='.', markersize=0,
+                linewidth=1.5, marker='.', markersize=0,
                 color=colors[i], alpha=.5
             )
     # Plot violins ------------------------------------------------------------
@@ -87,7 +96,7 @@ def plotTraces(
         )
     for (i, vElement) in enumerate(bp['bodies']):
         vElement.set_facecolor((0, 0, 1, .5))
-        vElement.set_alpha(.05)
+        vElement.set_alpha(.035)
         vElement.set_linewidth(1.5)
     vp = bp['cmedians']
     vp.set_edgecolor((.3, .3, .3))
@@ -95,7 +104,7 @@ def plotTraces(
     vp.set_alpha(.8)
     vp = bp['cmeans']
     vp.set_edgecolor((.3, .3, .3))
-    vp.set_linewidth(.75)
+    vp.set_linewidth(1.25)
     vp.set_alpha(.75)
     # Grids and labels --------------------------------------------------------
     major_ticks = range(0, len(means), 1)
@@ -112,7 +121,7 @@ def plotTraces(
     plt.xticks(fontsize=22.5)
     plt.yticks(fontsize=22.5, rotation=0)
     plt.ylabel('Deviation from Mean (minutes)', fontsize=50)
-    plt.title('Run Time Distributions', fontsize=75)
+    plt.title('Run Time', fontsize=75)
     for (i, y) in enumerate(list(traces[-1])):
         x = len(means) - .6
         if i % 2 == 1:
@@ -123,4 +132,14 @@ def plotTraces(
                 horizontalalignment='left', verticalalignment='center',
                 color=colors[i], rotation=0
             )
+    plt.text(
+            x, 0, labelMean, fontsize=13,
+            horizontalalignment='left', verticalalignment='center',
+            color=(0, 0, 0, .25)
+        )
+    plt.text(
+            x, tSts[2]-tSts[1], labelMedian, fontsize=13,
+            horizontalalignment='left', verticalalignment='center',
+            color=(0, 0, 0, .5)
+        )
     return fig

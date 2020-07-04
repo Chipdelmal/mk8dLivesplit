@@ -106,8 +106,60 @@ def getSegmentTraces(doc, skip=0):
             'names': names,
             'means': means,
             'final': fSplit,
-            'cumTimes': cTimes,
-            'cumTimesT': cTimesT,
+            'cmTimes': cTimes,
+            'cmTimesT': cTimesT,
             'deviance': traces
         }
     return tDicts
+
+
+def timeIntervalsFromTrackNames(tNameStart, tNameEnd, cTimes, tNames):
+    runsNum = len(cTimes[0])
+    # Get Starting track timings
+    if tNameStart is None:
+        tSrt = [0] * runsNum
+    else:
+        ixSrt = tNames.index(tNameStart)
+        tSrt = [split[ixSrt] for split in cTimes]
+    # Get Ending track timings
+    ixEnd = tNames.index(tNameEnd)
+    tEnd = [split[ixEnd] for split in cTimes]
+    # Calculate times
+    times = [i[1] - i[0] for i in zip(tSrt, tEnd)]
+    return times
+
+
+def timesForCategories(doc):
+    # #########################################################################
+    # Get Timings and names
+    # #########################################################################
+    seg = doc['Run']['Segments']['Segment']
+    fTimes = finishedRunsTimes(seg)
+    cTimes = [np.cumsum(i)/60 for i in fTimes]
+    names = getSegmentStats(doc)['names']
+    # #########################################################################
+    # Get category timings (https://www.speedrun.com/mk8dx)
+    # #########################################################################
+    tFortyEight = timeIntervalsFromTrackNames(
+            None, 'Big Blue', cTimes, names
+        )
+    tThirtyTwo = timeIntervalsFromTrackNames(
+            None, 'N64 Rainbow Road', cTimes, names
+        )
+    tNitro = timeIntervalsFromTrackNames(
+            None, 'Rainbow Road', cTimes, names
+        )
+    tRetro = timeIntervalsFromTrackNames(
+            'Rainbow Road', 'N64 Rainbow Road', cTimes, names
+        )
+    tBonus = timeIntervalsFromTrackNames(
+            'N64 Rainbow Road', 'Big Blue', cTimes, names
+        )
+    # #########################################################################
+    # Compile dictionary for return
+    # #########################################################################
+    tSplits = {
+            '48 Tracks': tFortyEight, '32 Tracks': tThirtyTwo,
+            'Nitro': tNitro, 'Retro': tRetro, 'Bonus': tBonus
+        }
+    return tSplits
