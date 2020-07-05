@@ -36,15 +36,10 @@ fig.savefig(
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Timings Table ###############################################################
-catDicts = fun.timesForCategories(doc)
-catKeys = list(catDicts.keys())
-rowNum = len(catDicts.get('48 Tracks'))
-
-head = ['Run']
-head.extend(range(rowNum))
-table = [head]
-for i in catKeys:
-    rHead = [i]
-    rHead.extend(catDicts.get(i))
-    table.append(rHead)
-table
+catDict = fun.timesForCategories(doc)
+catPD = fun.getTimesTableForCategories(catDict)
+fig = plot.renderTable(catPD)
+fig.savefig(
+        '{}table.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
+    )

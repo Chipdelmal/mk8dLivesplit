@@ -1,5 +1,7 @@
 
+
 import numpy as np
+import pandas as pd
 import statistics as stats
 from datetime import datetime
 from datetime import timedelta
@@ -163,3 +165,19 @@ def timesForCategories(doc):
             'Nitro': tNitro, 'Retro': tRetro, 'Bonus': tBonus
         }
     return tSplits
+
+
+def getTimesTableForCategories(catDicts):
+    catKeys = list(catDicts.keys())
+    rowNum = len(catDicts.get('48 Tracks'))
+
+    head = ['Run']
+    head.extend(range(rowNum))
+    table = [head]
+    for i in catKeys:
+        rHead = [i]
+        rHead.extend([minsToHr(j) for j in catDicts.get(i)])
+        table.append(rHead)
+    fTable = list(zip(*table))
+    df = pd.DataFrame(fTable[1:], columns=fTable[0])
+    return df
