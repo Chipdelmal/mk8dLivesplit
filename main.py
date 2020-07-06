@@ -13,6 +13,15 @@ import matplotlib.pylab as pl
 # Parse XML ###################################################################
 with open(PATH+FILE) as fd:
     doc = xmltodict.parse(fd.read())
+# Timings Table ###############################################################
+catDict = fun.timesForCategories(doc)
+catPD = fun.getTimesTableForCategories(catDict)
+mixLst = fun.getTableMinTimes(catDict)
+fig = plot.renderTable(catPD, minPos=mixLst)
+fig.savefig(
+        '{}table.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
+    )
 # Violin ######################################################################
 tStats = fun.getSegmentStats(doc)
 fig = plot.plotTimings(tStats)
@@ -29,17 +38,10 @@ tracesDta = fun.getSegmentTraces(doc, skip=1)
     )
 fig = plot.plotTraces(
         traces, fSplit, cTimes, cTimesT, means, names,
-        yRange=1, cmap=pl.cm.Purples
+        yRange=1, cmap=pl.cm.Purples,
+        vNames=['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
     )
 fig.savefig(
         '{}times.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
-    )
-# Timings Table ###############################################################
-catDict = fun.timesForCategories(doc)
-catPD = fun.getTimesTableForCategories(catDict)
-fig = plot.renderTable(catPD)
-fig.savefig(
-        '{}table.{}'.format(OUT, TYP),
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )

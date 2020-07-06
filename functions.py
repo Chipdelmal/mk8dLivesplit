@@ -181,3 +181,13 @@ def getTimesTableForCategories(catDicts):
     fTable = list(zip(*table))
     df = pd.DataFrame(fTable[1:], columns=fTable[0])
     return df
+
+
+def getTableMinTimes(catDict):
+    ixLst = []
+    for (i, key) in enumerate(catDict):
+        tList = catDict[key]
+        minVal = min(tList)
+        ix = tList.index(minVal)
+        ixLst.append((ix+1, i+1))
+    return ixLst

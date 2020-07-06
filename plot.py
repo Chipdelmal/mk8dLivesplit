@@ -68,6 +68,7 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
 
 def plotTraces(
             traces, fSplit, cTimes, cTimesT, means, names, yRange=1,
+            vNames=None,
             cmap=pl.cm.Purples
         ):
     # Stats ...................................................................
@@ -144,11 +145,20 @@ def plotTraces(
             horizontalalignment='left', verticalalignment='center',
             color=(0, 0, 0, .5)
         )
+    # VLines ------------------------------------------------------------------
+    if vNames is not None:
+        vLinesLst = [names.index(name) for name in vNames]
+        vLinesLst.extend([0])
+        for vlin in vLinesLst:
+            plt.vlines(
+                    vlin, -yRange, yRange, linestyles="dashed",
+                    colors=(.5, 0, 0, .4)
+                )
     return fig
 
 
 def renderTable(
-            data, col_width=3.0, row_height=0.625, font_size=14,
+            data, minPos=None, col_width=3.0, row_height=0.625, font_size=14,
             header_color='#40466e', row_colors=['#f1f1f2', 'w'],
             edge_color='w', bbox=[0, 0, 1, 1], header_columns=0,
             ax=None, **kwargs
@@ -161,15 +171,21 @@ def renderTable(
         fig, ax = plt.subplots(figsize=size)
         ax.axis('off')
 
-    mpl_table = ax.table(cellText=data.values, bbox=bbox, colLabels=data.columns, **kwargs)
+    mpl_table = ax.table(
+            cellText=data.values, bbox=bbox, colLabels=data.columns,
+            cellLoc='center', **kwargs
+        )
     mpl_table.auto_set_font_size(False)
     mpl_table.set_fontsize(font_size)
 
-    for k, cell in  six.iteritems(mpl_table._cells):
+    for k, cell in six.iteritems(mpl_table._cells):
         cell.set_edgecolor(edge_color)
         if k[0] == 0 or k[1] < header_columns:
             cell.set_text_props(weight='bold', color='w')
             cell.set_facecolor(header_color)
         else:
-            cell.set_facecolor(row_colors[k[0]%len(row_colors) ])
+            cell.set_facecolor(row_colors[k[0] % len(row_colors)])
+    if minPos is not None:
+        for ix in minPos:
+            mpl_table[ix].set_facecolor("#56b5fd50")
     return fig
