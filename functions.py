@@ -218,7 +218,7 @@ def getTrackTableMinTimes(tDict):
 
 
 def getTimesTableForTracks(timeTable):
-    head = ['Track']
+    head = ['Run']
     head.extend([1+i for i in range(len(timeTable[0])-1)])
     df = pd.DataFrame(timeTable, columns=head)
     return df

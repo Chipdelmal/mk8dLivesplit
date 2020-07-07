@@ -1,14 +1,13 @@
 
 import six
 import numpy as np
-import pandas as pd
 import functions as fun
 import matplotlib.pylab as pl
 from datetime import timedelta
 import matplotlib.pyplot as plt
 
 
-def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
+def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150), vNames=None):
     (tHists, tDevs, tNames) = (
             tStats['hist'], tStats['sd'], tStats['names']
         )
@@ -34,7 +33,6 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     plt.yticks(fontsize=22.5, rotation=0)
     plt.ylabel('Duration (seconds)', fontsize=50)
     plt.title('Split Time Distributions', fontsize=75)
-
     # Create the boxplot
     bp = ax.violinplot(
             tHists, widths=.9, showmedians=True, showmeans=True,
@@ -53,23 +51,29 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150)):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(.75)
     vp.set_alpha(.75)
-    # tSts = (tStats['min'], tStats['mean'], tStats['median'], tStats['max'])
-    # tms = [fun.minsToHr(i, prec=-7) for i in tSts]
-    # label = "Total: [Min: {}, Mean: {}, Median: {}, Max: {}]".format(
-    #         tms[0], tms[1], tms[2], tms[3]
-    #     )
-    # plt.text(
-    #         .5, .975, label, fontsize=40,
-    #         horizontalalignment='center', verticalalignment='center',
-    #         transform=ax.transAxes, color=(0, 0, 0, .25)
-    #     )
+    # VLines ------------------------------------------------------------------
+    if vNames is not None:
+        if vNames == 'cups':
+            vLinesLst = range(0, len(tNames), 4)[1:]
+            for vlin in vLinesLst:
+                plt.vlines(
+                        vlin, ylim[0], ylim[1], linestyles="dashed",
+                        colors='#FF007F40', linewidths=1.25
+                    )
+        else:
+            vLinesLst = [tNames.index(name)+1 for name in vNames]
+            vLinesLst.extend([1])
+            for vlin in vLinesLst:
+                plt.vlines(
+                        vlin, ylim[0], ylim[1], linestyles="dotted",
+                        colors='#FF007F40', linewidths=1.25
+                    )
     return fig
 
 
 def plotTraces(
             traces, fSplit, cTimes, cTimesT, means, names, yRange=1,
-            vNames=None,
-            cmap=pl.cm.Purples
+            vNames=None, cmap=pl.cm.Purples
         ):
     # Stats ...................................................................
     tSts = (
@@ -152,7 +156,7 @@ def plotTraces(
         for vlin in vLinesLst:
             plt.vlines(
                     vlin, -yRange, yRange, linestyles="dashed",
-                    colors=(.5, 0, 0, .4)
+                    colors='#FF007F50', linewidths=1.25
                 )
     return fig
 

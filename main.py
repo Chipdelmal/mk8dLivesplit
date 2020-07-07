@@ -13,20 +13,14 @@ import matplotlib.pylab as pl
 # Parse XML ###################################################################
 with open(PATH+FILE) as fd:
     doc = xmltodict.parse(fd.read())
-# Timings Table ###############################################################
-catDict = fun.timesForCategories(doc)
-catPD = fun.getTimesTableForCategories(catDict)
-mixLst = fun.getTableMinTimes(catDict)
-fig = plot.renderTable(catPD, minPos=mixLst)
-fig.savefig(
-        '{}tableRun.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
-    )
 # Violin ######################################################################
 tStats = fun.getSegmentStats(doc)
-fig = plot.plotTimings(tStats)
+fig = plot.plotTimings(
+        tStats, vNames='cups'
+        # vNames=['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
+    )
 fig.savefig(
-        '{}violin.{}'.format(OUT, TYP),
+        '{}plotViolin.{}'.format(OUT, TYP),
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Traces ######################################################################
@@ -42,14 +36,23 @@ fig = plot.plotTraces(
         vNames=['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
     )
 fig.savefig(
-        '{}times.{}'.format(OUT, TYP),
+        '{}plotTimes.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
+    )
+# Timings Table ###############################################################
+catDict = fun.timesForCategories(doc)
+catPD = fun.getTimesTableForCategories(catDict)
+mixLst = fun.getTableMinTimes(catDict)
+fig = plot.renderTable(catPD, minPos=mixLst, col_width=1.75)
+fig.savefig(
+        '{}tableRun.{}'.format(OUT, TYP),
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Tracks Table ################################################################
 (tTable, tDict) = fun.getTimesForTracks(doc)
 mixLstT = fun.getTrackTableMinTimes(tDict)
 catPDT = fun.getTimesTableForTracks(tTable)
-fig = plot.renderTable(catPDT, col_width=4, minPos=mixLstT)
+fig = plot.renderTable(catPDT, col_width=3.5, minPos=mixLstT)
 fig.savefig(
         '{}tableTrack.{}'.format(OUT, TYP),
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
