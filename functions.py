@@ -9,6 +9,10 @@ from datetime import timedelta
 REFT = datetime(1900, 1, 1, 0, 0, 0, 0)
 
 
+def secToMin(sec, prec=-4):
+    return str(timedelta(seconds=sec))[2:prec]
+
+
 def minsToHr(mins, prec=-4):
     return str(timedelta(minutes=mins))[:prec]
 
@@ -172,7 +176,7 @@ def getTimesTableForCategories(catDicts):
     rowNum = len(catDicts.get('48 Tracks'))
 
     head = ['Run']
-    head.extend(range(rowNum))
+    head.extend(range(1, rowNum+1))
     table = [head]
     for i in catKeys:
         rHead = [i]
@@ -191,3 +195,30 @@ def getTableMinTimes(catDict):
         ix = tList.index(minVal)
         ixLst.append((ix+1, i+1))
     return ixLst
+
+
+def getTimesForTracks(doc):
+    seg = doc['Run']['Segments']['Segment']
+    fTimes = finishedRunsTimes(seg)
+    names = getSegmentStats(doc)['names']
+
+    timeTable = []
+    for (i, x) in enumerate(zip(*fTimes)):
+        lst = list([secToMin(i) for i in x])
+        lst.insert(0, names[i])
+        timeTable.append(lst)
+    timeDict = {names[i]: x for (i, x) in enumerate(zip(*fTimes))}
+    return (timeTable, timeDict)
+
+
+def getTrackTableMinTimes(tDict):
+    mixLst = getTableMinTimes(tDict)
+    mixLstT = [(i[1], i[0]) for i in mixLst]
+    return mixLstT
+
+
+def getTimesTableForTracks(timeTable):
+    head = ['Track']
+    head.extend([1+i for i in range(len(timeTable[0])-1)])
+    df = pd.DataFrame(timeTable, columns=head)
+    return df

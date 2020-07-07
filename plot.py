@@ -158,7 +158,7 @@ def plotTraces(
 
 
 def renderTable(
-            data, minPos=None, col_width=3.0, row_height=0.625, font_size=14,
+            data, minPos=None, col_width=2.25, row_height=0.625, font_size=14,
             header_color='#40466e', row_colors=['#f1f1f2', 'w'],
             edge_color='w', bbox=[0, 0, 1, 1], header_columns=0,
             ax=None, **kwargs
@@ -170,6 +170,7 @@ def renderTable(
         size = (np.array(data.shape[::-1]) + np.array([0, 1])) * np.array([col_width, row_height])
         fig, ax = plt.subplots(figsize=size)
         ax.axis('off')
+    rowsNum = data.shape[0]
 
     mpl_table = ax.table(
             cellText=data.values, bbox=bbox, colLabels=data.columns,
@@ -188,4 +189,7 @@ def renderTable(
     if minPos is not None:
         for ix in minPos:
             mpl_table[ix].set_facecolor("#56b5fd50")
+    for ix in range(rowsNum+1):
+        mpl_table[(ix, 0)].set_facecolor(header_color)
+        mpl_table[(ix, 0)].set_text_props(weight='bold', color='w')
     return fig

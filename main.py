@@ -19,7 +19,7 @@ catPD = fun.getTimesTableForCategories(catDict)
 mixLst = fun.getTableMinTimes(catDict)
 fig = plot.renderTable(catPD, minPos=mixLst)
 fig.savefig(
-        '{}table.{}'.format(OUT, TYP),
+        '{}tableRun.{}'.format(OUT, TYP),
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Violin ######################################################################
@@ -43,5 +43,14 @@ fig = plot.plotTraces(
     )
 fig.savefig(
         '{}times.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
+    )
+# Tracks Table ################################################################
+(tTable, tDict) = fun.getTimesForTracks(doc)
+mixLstT = fun.getTrackTableMinTimes(tDict)
+catPDT = fun.getTimesTableForTracks(tTable)
+fig = plot.renderTable(catPDT, col_width=4, minPos=mixLstT)
+fig.savefig(
+        '{}tableTrack.{}'.format(OUT, TYP),
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
