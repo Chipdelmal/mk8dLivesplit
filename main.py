@@ -16,7 +16,7 @@ with open(PATH+FILE) as fd:
 # Violin ######################################################################
 tStats = fun.getSegmentStats(doc)
 fig = plot.plotTimings(
-        tStats, vNames='cups'
+        tStats, vNames=None  # 'cups'
         # vNames=['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
     )
 fig.savefig(
@@ -24,7 +24,7 @@ fig.savefig(
         pad_inches=PAD, bbox_inches="tight", dpi=DPI
     )
 # Traces ######################################################################
-tracesDta = fun.getSegmentTraces(doc, skip=1)
+tracesDta = fun.getSegmentTraces(doc, skip=0)
 (names, means, fSplit, cTimes, cTimesT, traces) = (
         tracesDta['names'], tracesDta['means'],
         tracesDta['final'], tracesDta['cmTimes'],
@@ -32,8 +32,8 @@ tracesDta = fun.getSegmentTraces(doc, skip=1)
     )
 fig = plot.plotTraces(
         traces, fSplit, cTimes, cTimesT, means, names,
-        yRange=1, cmap=pl.cm.Purples,
-        vNames=['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
+        yRange=1.5, cmap=pl.cm.Purples,
+        vNames=None  # ['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
     )
 fig.savefig(
         '{}plotTimes.{}'.format(OUT, TYP),

@@ -156,7 +156,7 @@ def plotTraces(
         for vlin in vLinesLst:
             plt.vlines(
                     vlin, -yRange, yRange, linestyles="dashed",
-                    colors='#FF007F50', linewidths=1.25
+                    colors='#09044650', linewidths=1.25
                 )
     return fig
 
