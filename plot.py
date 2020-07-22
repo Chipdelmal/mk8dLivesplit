@@ -7,7 +7,7 @@ from datetime import timedelta
 import matplotlib.pyplot as plt
 
 
-def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150), vNames=None):
+def plotTimings(tStats, bc=(0, .3, .75), ylim=(70, 150), vNames=None):
     (tHists, tDevs, tNames) = (
             tStats['hist'], tStats['sd'], tStats['names']
         )
@@ -51,6 +51,18 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(80, 150), vNames=None):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(.75)
     vp.set_alpha(.75)
+    # tSts = (tStats['min'], tStats['mean'], tStats['median'], tStats['max'])
+    # tms = [fun.minsToHr(i, prec=-7) for i in tSts]
+    # label = "[Min: {}, Mean: {}, Median: {}, Max: {}]".format(
+    #          tms[0], tms[1], tms[2], tms[3]
+    #      )
+    # plt.text(
+    #          .5, .965, label, fontsize=50,
+    #          horizontalalignment='center', verticalalignment='center',
+    #          transform=ax.transAxes, color=(0, 0, 0, .03),
+    #          fontweight='ultralight',
+    #          family='sans-serif'
+    #      )
     # VLines ------------------------------------------------------------------
     if vNames is not None:
         if vNames == 'cups':
@@ -80,6 +92,7 @@ def plotTraces(
             np.min(fSplit), np.mean(fSplit),
             np.median(fSplit), np.max(fSplit)
         )
+    minTime = [np.min(i) for i in cTimesT]
     tms = [fun.minsToHr(i, prec=-4) for i in tSts]
     labelMean = "{}".format(tms[1])
     labelMedian = "{}".format(tms[2])
@@ -95,6 +108,11 @@ def plotTraces(
                 linewidth=1.5, marker='.', markersize=0,
                 color=colors[i], alpha=.5
             )
+    minTrace = [i[1] - i[0] for i in zip(means, minTime)]
+    ax.plot(
+            minTrace, linewidth=1.5, marker='.', markersize=0,
+            color='#ff006e', alpha=.75
+        )
     # Plot violins ------------------------------------------------------------
     bp = ax.violinplot(
             [i[0] - i[1] for i in zip(cTimesT, means)],
@@ -117,7 +135,7 @@ def plotTraces(
     major_ticks = range(0, len(means), 1)
     ax.grid(which='both')
     ax.set_xticks(major_ticks)
-    ax.set_yticks([.5 * i for i in range(-4, 4, 1)])
+    ax.set_yticks([.5 * i for i in range(-10, 10, 1)])
     ax.grid(which='major', alpha=.5)
     ax.set_xticklabels(
             ['{} [{}]'.format(i[1], '%05.2f' % i[0]) for i in zip(means, names)],
@@ -139,6 +157,12 @@ def plotTraces(
                 horizontalalignment='left', verticalalignment='center',
                 color=colors[i], rotation=0
             )
+    plt.text(
+            x, round(y, 4), str(timedelta(minutes=fSplit[-1]))[:-4],
+            fontsize=13,
+            horizontalalignment='left', verticalalignment='center',
+            color='#ff006e', rotation=0
+        )
     plt.text(
             x, 0, labelMean, fontsize=13,
             horizontalalignment='left', verticalalignment='center',
