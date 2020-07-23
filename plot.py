@@ -158,7 +158,7 @@ def plotTraces(
                 color=colors[i], rotation=0
             )
     plt.text(
-            x, round(y, 4), str(timedelta(minutes=fSplit[-1]))[:-4],
+            x, round(min(list(traces)[-1]), 4), str(timedelta(minutes=min(fSplit)))[:-4],
             fontsize=13,
             horizontalalignment='left', verticalalignment='center',
             color='#ff006e', rotation=0

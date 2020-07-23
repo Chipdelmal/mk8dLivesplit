@@ -32,7 +32,7 @@ tracesDta = fun.getSegmentTraces(doc, skip=0)
     )
 fig = plot.plotTraces(
         traces, fSplit, cTimes, cTimesT, means, names,
-        yRange=(-3, 2), cmap=pl.cm.Purples,
+        yRange=(-.5, .5), cmap=pl.cm.Purples,
         vNames=None  # ['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
     )
 fig.savefig(
