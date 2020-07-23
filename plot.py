@@ -84,7 +84,7 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(70, 150), vNames=None):
 
 
 def plotTraces(
-            traces, fSplit, cTimes, cTimesT, means, names, yRange=1,
+            traces, fSplit, cTimes, cTimesT, means, names, yRange=(-1, 1),
             vNames=None, cmap=pl.cm.Purples
         ):
     # Stats ...................................................................
@@ -141,7 +141,7 @@ def plotTraces(
             ['{} [{}]'.format(i[1], '%05.2f' % i[0]) for i in zip(means, names)],
             rotation=90
         )
-    ax.set_ylim(-yRange, yRange)
+    ax.set_ylim(yRange[0], yRange[1])
     ax.set_xlim(-2, len(cTimesT) + 2)
     plt.xticks(fontsize=22.5)
     plt.yticks(fontsize=22.5, rotation=0)
