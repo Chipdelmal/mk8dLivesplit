@@ -1,25 +1,8 @@
 
 import statistics
+import auxFunctions as aux
 from xmltodict import parse
-from datetime import datetime
-# from datetime import timedelta
 from collections import OrderedDict
-
-###############################################################################
-# Timing
-###############################################################################
-REFT = datetime(1900, 1, 1, 0, 0, 0, 0)
-
-
-def tdeltaToSec(tDelta, microSec=1000000):
-    tm = (tDelta.seconds) + (tDelta.microseconds / microSec)
-    return tm
-
-
-def tStrToSecs(tStr, refTime=REFT):
-    trackTiming = datetime.strptime(tStr[:-1], '%H:%M:%S.%f')
-    tDiff = tdeltaToSec(trackTiming - REFT)
-    return tDiff
 
 
 ###############################################################################
@@ -33,8 +16,8 @@ def getRunsDict(seg):
     (nms, tracksDict) = (getSegmentsNames(seg), OrderedDict())
     for (ix, track) in enumerate(seg):
         tHist = track['SegmentHistory']['Time']
-        tEntries = {int(i['@id']): tStrToSecs(i['RealTime']) for i in tHist}
-        tracksDict.update({nms[ix]: tEntries})
+        tEntry = {int(i['@id']): aux.tStrToSecs(i['RealTime']) for i in tHist}
+        tracksDict.update({nms[ix]: tEntry})
     return tracksDict
 
 
