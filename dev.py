@@ -1,7 +1,7 @@
 
 from xmltodict import parse
 import dataFunctions as fun
-
+from collections import OrderedDict
 
 (PATH, FILE, OUT) = (
         './dta/',
@@ -12,10 +12,15 @@ import dataFunctions as fun
 # Parse XML ###################################################################
 with open(PATH+FILE) as fd:
     doc = parse(fd.read())
-
-# Dev #########################################################################
 seg = fun.getSegments(doc)
-fshdRunID = fun.getFinishedRunsId(seg)
+
+# Runs history and stats ######################################################
 runsHistory = fun.getRunsDict(seg)
 runsStats = fun.getRunsStats(runsHistory)
-runsStats
+# Filter to finished runs #####################################################
+fshdRunID = fun.getFinishedRunsId(seg)
+fshdRunHistory = fun.filterRunsDict(runsHistory, fshdRunID)
+fshdRunsStats = fun.getRunsStats(fshdRunHistory)
+# Filter runs #################################################################
+trace = fun.getRunFromID(runsHistory, 66)
+trace
