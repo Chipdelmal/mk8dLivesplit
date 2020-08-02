@@ -1,8 +1,9 @@
+
+import statistics
+from xmltodict import parse
 from datetime import datetime
 # from datetime import timedelta
 from collections import OrderedDict
-import statistics
-
 
 ###############################################################################
 # Timing
@@ -62,6 +63,25 @@ def getRunsStats(runsHistory):
     return tracksStats
 
 
+def calcRunsCumulative(finishedRunsHistory):
+    (keys, runHistCml) = (list(finishedRunsHistory.keys()), OrderedDict())
+    fshdRunID = list(finishedRunsHistory.get(keys[0]).keys())
+    # Prime the dictionary with first track
+    runHistCml.update({keys[0]: finishedRunsHistory.get(keys[0])})
+    # Iterate through the rest of the tracks
+    for tIx in range(1, len(keys)):
+        trackDict = {}
+        (tKeyC, tKeyP) = (keys[tIx], keys[tIx-1])
+        for rID in fshdRunID:
+            (tC, tP) = (
+                    finishedRunsHistory[tKeyC].get(rID),
+                    runHistCml[tKeyP].get(rID)
+                )
+            trackDict.update({rID: tC + tP})
+        runHistCml.update({keys[tIx]: trackDict})
+    return runHistCml
+
+
 ###############################################################################
 # Statistics
 ###############################################################################
@@ -89,3 +109,10 @@ def getFinishedRunsId(segment, skip=0):
 
 def getSegmentsNames(seg):
     return [i['Name'] for i in seg]
+
+
+def getSegmentsFromFile(filePath):
+    with open(filePath) as fd:
+        doc = parse(fd.read())
+    seg = getSegments(doc)
+    return seg

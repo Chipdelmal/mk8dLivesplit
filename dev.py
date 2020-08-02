@@ -1,19 +1,14 @@
 
-from xmltodict import parse
 import dataFunctions as fun
 from collections import OrderedDict
 
-(PATH, FILE, OUT) = (
-        './dta/',
-        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss',
-        '/home/chipdelmal/MEGAsync/MK8D/'
-    )
-(DPI, PAD, TYP) = (250, .1, 'png')
-# Parse XML ###################################################################
-with open(PATH+FILE) as fd:
-    doc = parse(fd.read())
-seg = fun.getSegments(doc)
+(PATH, OUT, FILE) = (
+        './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
+        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'
 
+    )
+# Parse XML ###################################################################
+seg = fun.getSegmentsFromFile(PATH+FILE)
 # Runs history and stats ######################################################
 runsHistory = fun.getRunsDict(seg)
 runsStats = fun.getRunsStats(runsHistory)
@@ -21,6 +16,7 @@ runsStats = fun.getRunsStats(runsHistory)
 fshdRunID = fun.getFinishedRunsId(seg)
 fshdRunHistory = fun.filterRunsDict(runsHistory, fshdRunID)
 fshdRunsStats = fun.getRunsStats(fshdRunHistory)
+# Cumulative history ##########################################################
+fshdRunHistoryCml = fun.calcRunsCumulative(fshdRunHistory)
 # Filter runs #################################################################
-trace = fun.getRunFromID(runsHistory, 66)
-trace
+trace = fun.getRunFromID(fshdRunHistoryCml, 66)
