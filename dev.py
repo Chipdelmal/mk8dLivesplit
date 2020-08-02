@@ -2,6 +2,9 @@
 import pandas as pd
 from xmltodict import parse
 import functions as fun
+from datetime import datetime
+from datetime import timedelta
+
 
 (PATH, FILE, OUT) = (
         './dta/',
@@ -15,6 +18,9 @@ with open(PATH+FILE) as fd:
 
 
 # Functions ###################################################################
+REFT = datetime(1900, 1, 1, 0, 0, 0, 0)
+
+
 def getSegments(doc):
     return doc['Run']['Segments']['Segment']
 
@@ -29,9 +35,28 @@ def getSegmentsNames(seg):
     return [i['Name'] for i in seg]
 
 
+def tdeltaToSec(tDelta, microSec=1000000):
+    tm = (tDelta.seconds) + (tDelta.microseconds / microSec)
+    return tm
+
+
+def tStrToSecs(tStr, refTime=REFT):
+    trackTiming = datetime.strptime(tStr[:-1], '%H:%M:%S.%f')
+    tDiff = tdeltaToSec(trackTiming - REFT)
+    return tDiff
+
+
+def getTracksDict(seg):
+    (nms, tracksDict) = (getSegmentsNames(seg), {})
+    for (ix, track) in enumerate(seg):
+        tHist = track['SegmentHistory']['Time']
+        tEntries = [(i['@id'], tStrToSecs(i['RealTime'])) for i in tHist]
+        tracksDict.update({nms[ix]: tEntries})
+    return tracksDict
+
+
 # Dev #########################################################################
 seg = getSegments(doc)
 fshdID = getFinishedRunsId(seg)
-nms = getSegmentsNames(seg)
-
-nms
+segRuns = getTracksDict(seg)
+segRuns
