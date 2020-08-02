@@ -51,18 +51,6 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(70, 150), vNames=None):
     vp.set_edgecolor((.3, .3, .3))
     vp.set_linewidth(.75)
     vp.set_alpha(.75)
-    # tSts = (tStats['min'], tStats['mean'], tStats['median'], tStats['max'])
-    # tms = [fun.minsToHr(i, prec=-7) for i in tSts]
-    # label = "[Min: {}, Mean: {}, Median: {}, Max: {}]".format(
-    #          tms[0], tms[1], tms[2], tms[3]
-    #      )
-    # plt.text(
-    #          .5, .965, label, fontsize=50,
-    #          horizontalalignment='center', verticalalignment='center',
-    #          transform=ax.transAxes, color=(0, 0, 0, .03),
-    #          fontweight='ultralight',
-    #          family='sans-serif'
-    #      )
     # VLines ------------------------------------------------------------------
     if vNames is not None:
         if vNames == 'cups':
@@ -84,8 +72,8 @@ def plotTimings(tStats, bc=(0, .3, .75), ylim=(70, 150), vNames=None):
 
 
 def plotTraces(
-            traces, fSplit, cTimes, cTimesT, means, names, yRange=(-1, 1),
-            vNames=None, cmap=pl.cm.Purples
+            traces, fSplit, cTimes, cTimesT, means, names, tStats, env=True,
+            yRange=(-1, 1), vNames=None, cmap=pl.cm.Purples
         ):
     # Stats ...................................................................
     tSts = (
@@ -96,6 +84,16 @@ def plotTraces(
     tms = [fun.minsToHr(i, prec=-4) for i in tSts]
     labelMean = "{}".format(tms[1])
     labelMedian = "{}".format(tms[2])
+    minSegments = [min(i)/60 for i in tStats['hist']]
+    minSplits = list(np.cumsum(minSegments))
+    minSDList = [0]
+    minSDList.extend(minSplits)
+    minSD = [i[1] - i[0] for i in zip(means, minSDList)]
+    maxSegments = [max(i)/60 for i in tStats['hist']]
+    maxSplits = list(np.cumsum(maxSegments))
+    maxSDList = [0]
+    maxSDList.extend(maxSplits)
+    maxSD = [i[1] - i[0] for i in zip(means, maxSDList)]
     # Fig ---------------------------------------------------------------------
     fig = plt.figure(figsize=(24, 12))
     ax = fig.add_axes([0, 0, 1, 1])
@@ -135,7 +133,7 @@ def plotTraces(
     major_ticks = range(0, len(means), 1)
     ax.grid(which='both')
     ax.set_xticks(major_ticks)
-    ax.set_yticks([.5 * i for i in range(-10, 10, 1)])
+    ax.set_yticks([.25 * i for i in range(-10, 10, 1)])
     ax.grid(which='major', alpha=.5)
     ax.set_xticklabels(
             ['{} [{}]'.format(i[1], '%05.2f' % i[0]) for i in zip(means, names)],
@@ -173,6 +171,36 @@ def plotTraces(
             horizontalalignment='left', verticalalignment='center',
             color=(0, 0, 0, .5)
         )
+    if env:
+        ax.plot(
+                minSD, linewidth=1.5, ls='--', markersize=0,
+                color='#ff006e50'
+            )
+        ax.plot(
+                maxSD, linewidth=1.5, ls='--', markersize=0,
+                color='#ff006e50'
+            )
+        plt.text(
+                x, minSD[-1],  str(timedelta(minutes=minSplits[-1],))[:-4],
+                fontsize=13, horizontalalignment='left', verticalalignment='center',
+                color='#ff006e50'
+            )
+        plt.text(
+                x, maxSD[-1],  str(timedelta(minutes=maxSplits[-1],))[:-4],
+                fontsize=13, horizontalalignment='left', verticalalignment='center',
+                color='#ff006e50'
+            )
+    else:
+        plt.text(
+                x, yRange[0]+.02,  str(timedelta(minutes=minSplits[-1],))[:-4],
+                fontsize=13, horizontalalignment='left', verticalalignment='center',
+                color='#00000050'
+            )
+        plt.text(
+                x, yRange[1]-.02,  str(timedelta(minutes=maxSplits[-1],))[:-4],
+                fontsize=13, horizontalalignment='left', verticalalignment='center',
+                color='#00000050'
+            )
     # VLines ------------------------------------------------------------------
     if vNames is not None:
         vLinesLst = [names.index(name) for name in vNames]
