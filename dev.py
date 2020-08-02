@@ -18,5 +18,6 @@ fshdRunHistory = fun.filterRunsDict(runsHistory, fshdRunID)
 fshdRunsStats = fun.getRunsStats(fshdRunHistory)
 # Cumulative history ##########################################################
 fshdRunHistoryCml = fun.calcRunsCumulative(fshdRunHistory)
+fshdRunsCmlStats = fun.getRunsStats(fshdRunHistoryCml)
 # Filter runs #################################################################
 trace = fun.getRunFromID(fshdRunHistoryCml, 66)
