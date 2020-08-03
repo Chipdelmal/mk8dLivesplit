@@ -33,7 +33,4 @@ trace = fun.getRunFromID(fshdRunHistoryCml, 66)
 ###############################################################################
 # Violin ----------------------------------------------------------------------
 (fig, ax) = plot.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
-fig.savefig(
-        '{}plotViolin.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
-    )
+aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))

@@ -29,3 +29,10 @@ def minsToHr(mins, prec=-4):
 
 def scaleDevs(x, tDevs):
     return (x - min(tDevs)) / (max(tDevs) - min(tDevs))
+
+
+###############################################################################
+# Save figure
+###############################################################################
+def saveFig(fig, path, pad=.1, bbox='tight', dpi=250):
+    fig.savefig(path, pad_inches=pad, bbox_inches=bbox, dpi=dpi)
