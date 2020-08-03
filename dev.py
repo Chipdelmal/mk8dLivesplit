@@ -36,10 +36,10 @@ trace = fun.getRunFromID(fshdRunHistoryCml, 66)
 # IN --------------------------------------------------------------------------
 # runsHistory
 # runsStats
-ylim = (70, 150)
-cmap = pl.cm.PuRd
-meanStyle = {'color': (.3, .3, .3), 'alpha': .5, 'width': .8}
-medianStyle = {'color': (.3, .3, .3), 'alpha': 1, 'width': 1}
+ylim = (75, 145)
+violinStyle = {'color': pl.cm.Purples, 'alpha': .4, 'lw': 3, 'lc': (0, 0, 0)}
+meanStyle = {'color': (.3, .3, .3), 'alpha': .65, 'width': .75}
+medianStyle = {'color': (.3, .3, .3), 'alpha': .85, 'width': 3}
 # Preprocess ------------------------------------------------------------------
 tNames = list(runsHistory.keys())
 tNum = len(tNames)
@@ -50,10 +50,10 @@ aux.scaleDevs(2, tSDs)
 fig = plt.figure(figsize=(24, 12))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set_ylim(ylim[0], ylim[1])
-ax.set_xlim(-1, tNum + 2)
+ax.set_xlim(0, tNum + 1)
 # Violin plot -----------------------------------------------------------------
 bp = ax.violinplot(
-        tTimes, widths=.9,
+        tTimes, widths=.75,
         showmedians=True, showmeans=True, showextrema=False
     )
 # Medians and Means style -----------------------------------------------------
@@ -72,13 +72,18 @@ ax.set_xticks(major_ticks)
 ax.set_xticklabels(tNames, rotation=90)
 ax.grid(which='major', alpha=.25)
 # Colors ----------------------------------------------------------------------
-norm = colors.Normalize(vmin=0, vmax=max(tSDs))
+(cmap, norm) = (violinStyle['color'], colors.Normalize(vmin=0, vmax=max(tSDs)))
 vColors = cmap(norm(tSDs))
 for (i, vElement) in enumerate(bp['bodies']):
     vElement.set_facecolor(vColors[i])
-    vElement.set_alpha(.25)
-    vElement.set_linewidth(3)
-
+    vElement.set_alpha(violinStyle['alpha'])
+    vElement.set_edgecolor(violinStyle['lc'])
+    vElement.set_linewidth(violinStyle['lw'])
+# Labels ----------------------------------------------------------------------
+plt.xticks(fontsize=22.5)
+plt.yticks(fontsize=22.5, rotation=0)
+plt.ylabel('Duration (seconds)', fontsize=50)
+plt.title('Split Time Distributions', fontsize=75)
 # Export ----------------------------------------------------------------------
 fig.savefig(
         '{}plotViolin.{}'.format(OUT, TYP),
