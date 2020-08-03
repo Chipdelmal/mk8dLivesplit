@@ -36,9 +36,15 @@ trace = fun.getRunFromID(fshdRunHistoryCml, 66)
 # IN --------------------------------------------------------------------------
 # runsHistory
 # runsStats
-ylim = (75, 145)
-violinStyle = {'color': pl.cm.Purples, 'alpha': .4, 'lw': 3, 'lc': (0, 0, 0)}
-meanStyle = {'color': (.3, .3, .3), 'alpha': .65, 'width': .75}
+ylim = (78, 142)
+violinStyle = {
+        'color': pl.cm.Purples, 'alpha': .4, 'width': .65,
+        'lw': 3, 'lc': (0, 0, 0),
+        'bandSize': 4,
+        'bandColorA': 'blue', 'bandAlphaA': 0.025,
+        'bandColorB': 'white', 'bandAlphaB': 0.025
+    }
+meanStyle = {'color': (.3, .3, .3), 'alpha': .65, 'width': .8}
 medianStyle = {'color': (.3, .3, .3), 'alpha': .85, 'width': 3}
 # Preprocess ------------------------------------------------------------------
 tNames = list(runsHistory.keys())
@@ -53,7 +59,7 @@ ax.set_ylim(ylim[0], ylim[1])
 ax.set_xlim(0.5, tNum + 0.5)
 # Violin plot -----------------------------------------------------------------
 bp = ax.violinplot(
-        tTimes, widths=.75,
+        tTimes, widths=violinStyle['width'],
         showmedians=True, showmeans=True, showextrema=False
     )
 # Medians and Means style -----------------------------------------------------
@@ -71,11 +77,13 @@ major_ticks = range(1, tNum+1, 1)
 ax.set_xticks(major_ticks)
 ax.set_xticklabels(tNames, rotation=90)
 ax.grid(which='major', alpha=0)
-for i in range(0, tNum, 4):
-    if i % 8 == 0:
-        ax.axvspan(i + 0.5, i + 4.5, alpha=0.025, color='blue', zorder=0)
+delta = violinStyle['bandSize']
+for i in range(0, tNum, delta):
+    if i % (2 * delta) == 0:
+        (clr, alp) = (violinStyle['bandColorA'], violinStyle['bandAlphaA'])
     else:
-        ax.axvspan(i + 0.5, i + 4.5, alpha=0.025, color='white', zorder=0)
+        (clr, alp) = (violinStyle['bandColorB'], violinStyle['bandAlphaB'])
+    ax.axvspan(i+0.5, i+delta+0.5, zorder=0, color=clr, alpha=alp)
 # Colors ----------------------------------------------------------------------
 (cmap, norm) = (violinStyle['color'], colors.Normalize(vmin=0, vmax=max(tSDs)))
 vColors = cmap(norm(tSDs))
