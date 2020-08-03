@@ -50,7 +50,7 @@ aux.scaleDevs(2, tSDs)
 fig = plt.figure(figsize=(24, 12))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set_ylim(ylim[0], ylim[1])
-ax.set_xlim(0, tNum + 1)
+ax.set_xlim(0.5, tNum + 0.5)
 # Violin plot -----------------------------------------------------------------
 bp = ax.violinplot(
         tTimes, widths=.75,
@@ -70,7 +70,12 @@ ax.grid(which='both')
 major_ticks = range(1, tNum+1, 1)
 ax.set_xticks(major_ticks)
 ax.set_xticklabels(tNames, rotation=90)
-ax.grid(which='major', alpha=.25)
+ax.grid(which='major', alpha=0)
+for i in range(0, tNum, 4):
+    if i % 8 == 0:
+        ax.axvspan(i + 0.5, i + 4.5, alpha=0.025, color='blue', zorder=0)
+    else:
+        ax.axvspan(i + 0.5, i + 4.5, alpha=0.025, color='white', zorder=0)
 # Colors ----------------------------------------------------------------------
 (cmap, norm) = (violinStyle['color'], colors.Normalize(vmin=0, vmax=max(tSDs)))
 vColors = cmap(norm(tSDs))
