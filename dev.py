@@ -1,13 +1,16 @@
 
+import auxFunctions as aux
 import dataFunctions as fun
 import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 (PATH, OUT, FILE) = (
         './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
         'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'
 
     )
+(DPI, PAD, TYP) = (250, .1, 'png')
 ###############################################################################
 # Read File
 ###############################################################################
@@ -34,12 +37,15 @@ trace = fun.getRunFromID(fshdRunHistoryCml, 66)
 # runsHistory
 # runsStats
 ylim = (70, 150)
-meanStyle = {'color': (.3, .3, .3), 'alpha': .8, 'width': .8}
-medianStyle = {'color': (.3, .3, .3), 'alpha': .75, 'width': .75}
+cmap = pl.cm.PuRd
+meanStyle = {'color': (.3, .3, .3), 'alpha': .5, 'width': .8}
+medianStyle = {'color': (.3, .3, .3), 'alpha': 1, 'width': 1}
 # Preprocess ------------------------------------------------------------------
 tNames = list(runsHistory.keys())
 tNum = len(tNames)
-tTimes = [list(runsHistory[track].values()) for track in tNames]
+tTimes = [list(runsHistory.get(track).values()) for track in tNames]
+tSDs = [runsStats.get(track).get('SD') for track in tNames]
+aux.scaleDevs(2, tSDs)
 # Setup figure and axes -------------------------------------------------------
 fig = plt.figure(figsize=(24, 12))
 ax = fig.add_axes([0, 0, 1, 1])
@@ -64,3 +70,17 @@ ax.grid(which='both')
 major_ticks = range(1, tNum+1, 1)
 ax.set_xticks(major_ticks)
 ax.set_xticklabels(tNames, rotation=90)
+ax.grid(which='major', alpha=.25)
+# Colors ----------------------------------------------------------------------
+norm = colors.Normalize(vmin=0, vmax=max(tSDs))
+vColors = cmap(norm(tSDs))
+for (i, vElement) in enumerate(bp['bodies']):
+    vElement.set_facecolor(vColors[i])
+    vElement.set_alpha(.25)
+    vElement.set_linewidth(3)
+
+# Export ----------------------------------------------------------------------
+fig.savefig(
+        '{}plotViolin.{}'.format(OUT, TYP),
+        pad_inches=PAD, bbox_inches="tight", dpi=DPI
+    )

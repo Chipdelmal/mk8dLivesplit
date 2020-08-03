@@ -25,3 +25,7 @@ def secToMin(sec, prec=-4):
 
 def minsToHr(mins, prec=-4):
     return str(timedelta(minutes=mins))[:prec]
+
+
+def scaleDevs(x, tDevs):
+    return (x - min(tDevs)) / (max(tDevs) - min(tDevs))
