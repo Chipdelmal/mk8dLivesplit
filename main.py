@@ -84,7 +84,7 @@ txtOut = '{}\n{}\n{}\n{}\n{}'.format(
 with open(OUT+'youtubeSummary.txt', "w") as text_file:
     text_file.write(txtOut)
 # Timestaps ###################################################################
-(ix, videoOffset) = (-1, 30)
+(ix, videoOffset) = (-1, 27)
 sTimes = [i[ix]+videoOffset/60 for i in cTimesT]
 sTimesFmt = [str(timedelta(minutes=time))[:7] for time in sTimes]
 tStamps = ['{}: {}'.format(i[0], i[1]) for i in zip(names[1:], sTimesFmt[:-1])]

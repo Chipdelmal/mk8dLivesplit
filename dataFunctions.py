@@ -87,7 +87,7 @@ def getTrackStats(track):
 def getFinishedRunsId(segment, skip=0):
     endTimesDict = segment[-1]['SegmentHistory']['Time']
     endRunIds = [int(ts['@id']) for ts in endTimesDict]
-    return set([int(i) for i in endRunIds if (i > skip)])
+    return sorted(list([int(i) for i in endRunIds if (i > skip)]))
 
 
 def getSegmentsNames(seg):
