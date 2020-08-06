@@ -36,3 +36,18 @@ def scaleDevs(x, tDevs):
 ###############################################################################
 def saveFig(fig, path, pad=.1, bbox='tight', dpi=250):
     fig.savefig(path, pad_inches=pad, bbox_inches=bbox, dpi=dpi)
+
+
+###############################################################################
+# Other
+###############################################################################
+def get_key(val, my_dict):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
+
+
+def prependValue(inList, value=0):
+    pad = [0]
+    pad.extend(inList)
+    return pad

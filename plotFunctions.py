@@ -39,8 +39,6 @@ def plotSegmentViolins(
     # Setup figure and axes ---------------------------------------------------
     fig = plt.figure(figsize=(24, 12))
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_ylim(ylim[0], ylim[1])
-    ax.set_xlim(0.5, tNum + 0.5)
     # Violin plot -------------------------------------------------------------
     bp = ax.violinplot(
             tTimes, widths=vStyle['width'],
@@ -84,4 +82,7 @@ def plotSegmentViolins(
     ax.set_xticklabels(tNames, rotation=90)
     plt.ylabel('Duration (seconds)', fontsize=bgStyle['labelsSize'] * .75)
     plt.title('Split Time Distributions', fontsize=bgStyle['labelsSize'])
+    # Ranges ------------------------------------------------------------------
+    ax.set_ylim(ylim[0], ylim[1])
+    ax.set_xlim(.25, tNum+.75)
     return (fig, ax)

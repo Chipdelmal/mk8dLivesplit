@@ -65,6 +65,12 @@ def calcRunsCumulative(finishedRunsHistory):
     return runHistCml
 
 
+def getRunIDWithTime(finishedRunsHistoryCum, trackName, op=min):
+    lastSplit = finishedRunsHistoryCum[trackName]
+    minTime = op(list(lastSplit.values()))
+    runID = aux.get_key(minTime, lastSplit)
+    return runID
+
 ###############################################################################
 # Statistics
 ###############################################################################
