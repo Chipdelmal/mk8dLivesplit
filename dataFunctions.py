@@ -71,6 +71,7 @@ def getRunIDWithTime(finishedRunsHistoryCum, trackName, op=min):
     runID = aux.get_key(minTime, lastSplit)
     return runID
 
+
 ###############################################################################
 # Statistics
 ###############################################################################
@@ -85,6 +86,15 @@ def getTrackStats(track):
             'Variance': statistics.variance(trackTimes)
         }
     return trackStats
+
+
+def getRunFromOp(runsHistory, op=min):
+    tNames = list(runsHistory.keys())
+    opDict = OrderedDict()
+    for track in tNames:
+        times = list(runsHistory[track].values())
+        opDict.update({track: {'0': op(times)}})
+    return opDict
 
 
 ###############################################################################
