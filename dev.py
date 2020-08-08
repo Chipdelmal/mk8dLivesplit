@@ -1,9 +1,9 @@
 
-import auxFunctions as aux
-import dataFunctions as fun
 import plotViolin as pv
 import plotTraces as pt
-
+import auxFunctions as aux
+import dataFunctions as fun
+import matplotlib.pyplot as plt
 
 (PATH, OUT, FILE) = (
         './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
@@ -37,8 +37,10 @@ minTimes = fun.getRunFromOp(runsHistory, op=min)
 # Violin ----------------------------------------------------------------------
 (fig, ax) = pv.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
 aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))
+plt.close(fig)
 # Traces ----------------------------------------------------------------------
 (fig, ax) = pt.plotSegmentTraces(
         runsHistory, fshdRunHistoryCml, fshdRunsStatsCml, ylim=(-.65, .65)
     )
 aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
+plt.close(fig)
