@@ -39,6 +39,6 @@ minTimes = fun.getRunFromOp(runsHistory, op=min)
 aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))
 # Traces ----------------------------------------------------------------------
 (fig, ax) = pt.plotSegmentTraces(
-        runsHistory, fshdRunHistoryCml, fshdRunsStatsCml, ylim=(-.7, .7)
+        runsHistory, fshdRunHistoryCml, fshdRunsStatsCml, ylim=(-.65, .65)
     )
 aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))

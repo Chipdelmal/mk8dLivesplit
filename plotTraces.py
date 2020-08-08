@@ -109,6 +109,13 @@ def plotSegmentTraces(
             horizontalalignment='left', verticalalignment='center',
             color=traceStyle['tcl'], rotation=0
         )
+    plt.text(
+        tNum+1, minTrace[-1],
+        str(timedelta(seconds=(minRun[lastKey])))[:-4],
+        fontsize=13,
+        horizontalalignment='left', verticalalignment='center',
+        color=minStyle['lc'], rotation=0
+    )
     # Medians and Means style -------------------------------------------------
     vp = bp['cmedians']
     vp.set_edgecolor(medianStyle['color'])
