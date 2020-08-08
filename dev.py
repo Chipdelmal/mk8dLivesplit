@@ -1,7 +1,7 @@
 
 import auxFunctions as aux
 import dataFunctions as fun
-import plotFunctions as plot
+import plotViolin as pv
 import numpy as np
 import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
@@ -35,23 +35,26 @@ trace = fun.getRunFromID(fshdRunHistoryCml, 66)
 # Plot Data
 ###############################################################################
 # Violin ----------------------------------------------------------------------
-(fig, ax) = plot.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
+(fig, ax) = pv.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
 aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))
 # Traces ----------------------------------------------------------------------
 
+
+from datetime import timedelta
 ###############################################################################
 # Dev
 ###############################################################################
 # In --------------------------------------------------------------------------
 # fshdRunHistoryCml
 # fshdRunsStatsCml
-cmap = pl.cm.Purples
 center = 'Mean'
 ylim = (-.6, .6)
 vStyle = {
         'color': '#888888', 'alpha': .05, 'width': .65,
         'lw': 3, 'lc': (0, 0, 0)
     }
+traceStyle = {'alpha': .5, 'lw': 1.5, 'lcm': pl.cm.Purples}
+minStyle = {'alpha': .75, 'lw': 2, 'lc': '#ff006e'}
 bgStyle = {
         'bandSize': 4,
         'bandColorA': 'blue', 'bandAlphaA': 0.025,
@@ -67,6 +70,7 @@ tNum = len(tNames)
 runsNum = len(fshdRunHistoryCml.get(tNames[0]))
 runsIDs = list(fshdRunHistoryCml.get(tNames[0]).keys())
 lastKey = list(fshdRunHistoryCml.keys())[-1]
+finishTimes = list(fshdRunHistoryCml.get(lastKey).values())
 # Calculate traces ------------------------------------------------------------
 central = [fshdRunsStatsCml.get(track)[center] for track in tNames]
 traces = []
@@ -76,29 +80,26 @@ for (i, id) in enumerate(runsIDs):
     traceDiff = aux.prependValue(traceDiff)
     traces.append(traceDiff)
 tracesT = list(map(list, zip(*traces)))
-# Min and max traces ----------------------------------------------------------
+# Min trace -------------------------------------------------------------------
 minRID = fun.getRunIDWithTime(fshdRunHistoryCml, lastKey, op=min)
 minRun = fun.getRunFromID(fshdRunHistoryCml, minRID)
 minTrace = [(i[1] - i[0])/60 for i in zip(central, list(minRun.values()))]
 minTrace = aux.prependValue(minTrace)
-maxRID = fun.getRunIDWithTime(fshdRunHistoryCml, lastKey, op=max)
-maxRun = fun.getRunFromID(fshdRunHistoryCml, maxRID)
-maxTrace = [(i[1] - i[0])/60 for i in zip(central, list(maxRun.values()))]
 # Setup figure and axes -------------------------------------------------------
 fig = plt.figure(figsize=(24, 12))
 ax = fig.add_axes([0, 0, 1, 1])
+cmap = traceStyle['lcm']
 colors = cmap(np.linspace(.05, 1, 1+runsNum))
 # Plot traces -----------------------------------------------------------------
 for (i, trace) in enumerate(traces):
     ax.plot(
             trace,
-            linewidth=2.5, marker='.', markersize=0,
-            color=colors[i], alpha=.5
+            linewidth=traceStyle['lw'], marker='.', markersize=0,
+            color=colors[i], alpha=traceStyle['alpha']
         )
 ax.plot(
         minTrace,
-        linewidth=2.5, marker='.', markersize=0,
-        color='#e239e6', alpha=.5
+        linewidth=minStyle['lw'], color=minStyle['lc'], alpha=minStyle['alpha']
     )
 # Plot violins ----------------------------------------------------------------
 bp = ax.violinplot(
@@ -112,7 +113,16 @@ for (i, vElement) in enumerate(bp['bodies']):
     vElement.set_alpha(vStyle['alpha'])
     vElement.set_edgecolor(vStyle['lc'])
     vElement.set_linewidth(vStyle['lw'])
-# Medians and Means style -------------------------------------------------
+# Plot times -----------------------------------------------------------------
+for (i, trace) in enumerate(traces):
+    plt.text(
+        tNum+1, trace[-1],
+        str(timedelta(seconds=(finishTimes[i])))[:-4],
+        fontsize=13,
+        horizontalalignment='left', verticalalignment='center',
+        color=colors[i], rotation=0
+    )
+# Medians and Means style ----------------------------------------------------
 vp = bp['cmedians']
 vp.set_edgecolor(medianStyle['color'])
 vp.set_linewidth(medianStyle['width'])
@@ -121,7 +131,7 @@ vp = bp['cmeans']
 vp.set_edgecolor(meanStyle['color'])
 vp.set_linewidth(meanStyle['width'])
 vp.set_alpha(meanStyle['alpha'])
-# Grids -------------------------------------------------------------------
+# Grids ----------------------------------------------------------------------
 ax.grid(which='both')
 major_ticks = range(1, tNum+1, 1)
 ax.set_xticks(major_ticks)
@@ -136,14 +146,14 @@ for i in range(0, tNum, delta):
     else:
         (clr, alp) = (bgStyle['bandColorB'], bgStyle['bandAlphaB'])
     ax.axvspan(i+0.5, i+delta+0.5, zorder=0, color=clr, alpha=alp)
-# Labels ------------------------------------------------------------------
+# Labels ---------------------------------------------------------------------
 plt.xticks(fontsize=bgStyle['xtickSize'])
 plt.yticks(fontsize=bgStyle['ytickSize'], rotation=0)
 ax.set_xticklabels(tNames, rotation=90)
-plt.ylabel('Duration (seconds)', fontsize=bgStyle['labelsSize'] * .75)
-plt.title('Split Time Distributions', fontsize=bgStyle['labelsSize'])
-# Ranges ------------------------------------------------------------------
+plt.ylabel('Deviation from Mean (minutes)', fontsize=bgStyle['labelsSize'] * .75)
+plt.title('Run Time', fontsize=bgStyle['labelsSize'])
+# Ranges ---------------------------------------------------------------------
 ax.set_ylim(ylim[0], ylim[1])
 ax.set_xlim(0, tNum+4)
-# Save --------------------------------------------------------------------
+# Save -----------------------------------------------------------------------
 aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
