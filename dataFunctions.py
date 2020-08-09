@@ -115,3 +115,11 @@ def getSegmentsFromFile(filePath):
         doc = parse(fd.read())
     seg = getSegments(doc)
     return seg
+
+
+def getRunFromStatsOp(runsStats, op='Min'):
+    tNames = list(runsStats.keys())
+    oDict = OrderedDict()
+    for tName in tNames:
+        oDict.update({tName: {'0': runsStats[tName][op]}})
+    return oDict

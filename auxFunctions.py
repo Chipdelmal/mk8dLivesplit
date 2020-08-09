@@ -1,4 +1,6 @@
 
+import numpy as np
+import dataFunctions as fun
 from datetime import datetime
 from datetime import timedelta
 
@@ -39,6 +41,23 @@ def saveFig(fig, path, pad=.1, bbox='tight', dpi=250):
 
 
 ###############################################################################
+# Youtube
+###############################################################################
+def getTracksTimestamps(fshdRunHistoryCml, vOff=0, ix=-1):
+    lastRun = fun.getRunFromID(fshdRunHistoryCml, ix)
+    names = ["Start"]
+    tNames = list(fshdRunHistoryCml.keys())
+    names.extend(tNames)
+    splits = [vOff]
+    mins = [(vOff+lastRun[i])/60 for i in tNames]
+    splits.extend(mins)
+    sTimesFmt = [str(timedelta(minutes=time))[:7] for time in splits]
+    itr = zip(names[1:], sTimesFmt[:-1])
+    tStamps = ['{}: {}'.format(i[0], i[1]) for i in itr]
+    return tStamps
+
+
+###############################################################################
 # Other
 ###############################################################################
 def get_key(val, my_dict):
@@ -51,3 +70,15 @@ def prependValue(inList, value=0):
     pad = [0]
     pad.extend(inList)
     return pad
+
+
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
+
+
+###############################################################################
+# Write
+###############################################################################
+def exportTxt(textData, outPath):
+    with open(outPath, "w") as text_file:
+        text_file.write(textData)

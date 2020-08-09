@@ -28,7 +28,7 @@ medianStyle = {'color': (.3, .3, .3), 'alpha': .85, 'width': 3}
 
 
 def plotSegmentTraces(
-            runsHistory, fshdRunHistoryCml, fshdRunsStatsCml,
+            fshdRunHistoryCml, runsStats, fshdRunsStatsCml,
             center='Mean', ylim=(-1, 1), vStyle=vStyle, traceStyle=traceStyle,
             minStyle=minStyle, bgStyle=bgStyle,
             meanStyle=meanStyle, medianStyle=medianStyle
@@ -42,8 +42,8 @@ def plotSegmentTraces(
     lastKey = list(fshdRunHistoryCml.keys())[-1]
     finishTimes = list(fshdRunHistoryCml.get(lastKey).values())
     (minTimes, maxTimes) = (
-            fun.getRunFromOp(runsHistory, op=min),
-            fun.getRunFromOp(runsHistory, op=max)
+            fun.getRunFromStatsOp(runsStats, op='Min'),
+            fun.getRunFromStatsOp(runsStats, op='Max')
         )
     (bestTime, worstTime) = (
             fun.calcRunsCumulative(minTimes)[lastKey]['0'],
