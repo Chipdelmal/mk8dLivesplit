@@ -15,10 +15,12 @@ import matplotlib.pyplot as plt
 ###############################################################################
 # Read File
 ###############################################################################
+print('* Reading file...')
 seg = fun.getSegmentsFromFile(PATH+FILE)
 ###############################################################################
 # Shape Runs Data
 ###############################################################################
+print('* Calculating stats...')
 # Runs history and stats ------------------------------------------------------
 runsHistory = fun.getRunsDict(seg)
 runsStats = fun.getRunsStats(runsHistory)
@@ -36,22 +38,26 @@ minTimes = fun.getRunFromStatsOp(runsStats, op='Min')
 # Plot Data
 ###############################################################################
 # Violin ----------------------------------------------------------------------
+print('* Plotting violins...')
 (fig, ax) = pv.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
 aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))
 plt.close(fig)
 # Traces ----------------------------------------------------------------------
+print('* Plotting traces...')
 (fig, ax) = pt.plotSegmentTraces(
         fshdRunHistoryCml, runsStats, fshdRunsStatsCml, ylim=(-.65, .65)
     )
 aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
 plt.close(fig)
 # Heatmap ---------------------------------------------------------------------
+print('* Plotting heatmap...')
 (fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=pl.cm.Purples)
 aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 ###############################################################################
 # Text Data
 ###############################################################################
+print('* Parsing timestamps...')
 # Timestaps -------------------------------------------------------------------
 timpestamps = aux.getTracksTimestamps(
         fshdRunHistoryCml, vOff=VOFF, ix=fshdRunID[-1]

@@ -4,10 +4,11 @@ import numpy as np
 import auxFunctions as aux
 import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 
 
 def plotSplitsHeatmap(
-            fshdRunHistory, cmap=pl.cm.Purples, fontsize=2, rnd=2,
+            fshdRunHistory, cmap=pl.cm.Purples, fontsize=2.5, rnd=2,
             fontColor='k', lineColor='k', lineWidth=.5
         ):
     tNames = list(fshdRunHistory.keys())
@@ -24,15 +25,15 @@ def plotSplitsHeatmap(
         nTimesArrays[i] = aux.NormalizeData(row)
 
     fig, ax = plt.subplots()
-    ax.imshow(nTimesArrays.T, cmap=cmap)
+    ax.matshow(nTimesArrays.T, cmap=cmap, norm=LogNorm(vmin=0.05, vmax=1))
     # We want to show all ticks...
     ax.set_yticks(np.arange(runsNum))
     ax.set_xticks(np.arange(len(tNames)))
     # ... and label them with the respective list entries
     ax.set_yticklabels(rIds, fontsize=5)
     ax.set_xticklabels(tNames, fontsize=7)
-
     # Rotate the tick labels and set their alignment.
+    ax.xaxis.set_ticks_position('bottom')
     plt.setp(
             ax.get_xticklabels(), rotation_mode="anchor",
             rotation=90, ha="right", va="center"
@@ -45,7 +46,7 @@ def plotSplitsHeatmap(
             ax.text(
                     i, j, round(timesArrays[i, j], rnd),
                     ha="center", va="center", color=fontColor,
-                    fontsize=fontsize
+                    fontsize=fontsize, rotation=45
                 )
     ax.set_title("Tracks Timing")
     fig.tight_layout()
