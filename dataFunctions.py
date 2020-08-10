@@ -123,3 +123,24 @@ def getRunFromStatsOp(runsStats, op='Min'):
     for tName in tNames:
         oDict.update({tName: {'0': runsStats[tName][op]}})
     return oDict
+
+
+def timeBetweenTracks(fshdRunDta, tracksInterval):
+    if tracksInterval[0] is None:
+        tInt = fshdRunDta[tracksInterval[1]]
+    else:
+        tInt = (fshdRunDta[tracksInterval[1]] - fshdRunDta[tracksInterval[0]])
+    return tInt
+
+
+def mk8dCategoriesSplits(fshdRun):
+    tFortyEight = timeBetweenTracks(fshdRun, (None, 'Big Blue'))
+    tThirtyTwo = timeBetweenTracks(fshdRun, (None, 'N64 Rainbow Road'))
+    tNitro = timeBetweenTracks(fshdRun, (None, 'Rainbow Road'))
+    tRetro = timeBetweenTracks(fshdRun, ('Rainbow Road', 'N64 Rainbow Road'))
+    tBonus = timeBetweenTracks(fshdRun, ('N64 Rainbow Road', 'Big Blue'))
+    catDict = {
+            '48': tFortyEight, '32': tThirtyTwo,
+            'Nitro': tNitro, 'Retro': tRetro, 'Bonus': tBonus
+        }
+    return catDict

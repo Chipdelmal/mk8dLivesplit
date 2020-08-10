@@ -13,7 +13,7 @@ def plotSplitsHeatmap(
         ):
     tNames = list(fshdRunHistory.keys())
     runsNum = len(fshdRunHistory.get(tNames[0]))
-    rIds = list(fshdRunHistory[tNames[0]].keys())
+    rIds = [str(i).zfill(3) for i in list(fshdRunHistory[tNames[0]].keys())]
 
     track = []
     for trackName in tNames:
@@ -30,7 +30,9 @@ def plotSplitsHeatmap(
     ax.set_yticks(np.arange(runsNum))
     ax.set_xticks(np.arange(len(tNames)))
     # ... and label them with the respective list entries
-    ax.set_yticklabels(rIds, fontsize=5)
+    runsNumStr = [str(i).zfill(2) for i in range(runsNum)]
+    ylab = ['[{} id:{}]'.format(i[1], i[0]) for i in zip(rIds, runsNumStr)]
+    ax.set_yticklabels(ylab, fontsize=5)
     ax.set_xticklabels(tNames, fontsize=7)
     # Rotate the tick labels and set their alignment.
     ax.xaxis.set_ticks_position('bottom')

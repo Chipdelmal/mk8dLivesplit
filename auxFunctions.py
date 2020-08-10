@@ -1,5 +1,4 @@
 
-import math
 import numpy as np
 import dataFunctions as fun
 from datetime import datetime
