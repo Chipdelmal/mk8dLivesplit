@@ -8,7 +8,7 @@ from matplotlib.colors import LogNorm
 
 
 def plotSplitsHeatmap(
-            fshdRunHistory, cmap=pl.cm.Purples, fontsize=2.5, rnd=2,
+            fshdRunHistory, cmap=pl.cm.Purples, fontsize=2.25, rnd=2,
             fontColor='k', lineColor='k', lineWidth=.5
         ):
     tNames = list(fshdRunHistory.keys())

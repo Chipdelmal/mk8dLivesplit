@@ -2,6 +2,7 @@
 import statistics
 import auxFunctions as aux
 from xmltodict import parse
+from datetime import timedelta
 from collections import OrderedDict
 
 
@@ -144,3 +145,11 @@ def mk8dCategoriesSplits(fshdRun):
             'Nitro': tNitro, 'Retro': tRetro, 'Bonus': tBonus
         }
     return catDict
+
+
+def getMK8DCategories(fshdRunHistoryCml, id):
+    catNames = ['48', '32', 'Nitro', 'Retro', 'Bonus']
+    fshdRun = getRunFromID(fshdRunHistoryCml, id)
+    catTimes = mk8dCategoriesSplits(fshdRun)
+    catStrg = {i: str(timedelta(seconds=catTimes[i]))[:-4] for i in catNames}
+    return catStrg

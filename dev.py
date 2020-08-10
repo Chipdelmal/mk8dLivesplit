@@ -3,11 +3,10 @@ import plotViolin as pv
 import plotTraces as pt
 import plotHeatmap as hea
 import auxFunctions as aux
-import dataFunctions as dta
 import dataFunctions as fun
 import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
-from datetime import timedelta
+
 
 (PATH, OUT, FILE) = (
         './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
@@ -34,8 +33,8 @@ fshdRunsStats = fun.getRunsStats(fshdRunHistory)
 fshdRunHistoryCml = fun.calcRunsCumulative(fshdRunHistory)
 fshdRunsStatsCml = fun.getRunsStats(fshdRunHistoryCml)
 # Filter runs -----------------------------------------------------------------
-trace = fun.getRunFromID(fshdRunHistoryCml, 66)
-minTimes = fun.getRunFromStatsOp(runsStats, op='Min')
+# trace = fun.getRunFromID(fshdRunHistoryCml, 66)
+# minTimes = fun.getRunFromStatsOp(runsStats, op='Min')
 ###############################################################################
 # Plot Data
 ###############################################################################
@@ -67,8 +66,4 @@ timpestamps = aux.getTracksTimestamps(
 aux.exportTxt('\n'.join(timpestamps), OUT+'youtubeTimestamps.txt')
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
-id = fshdRunID[-1]
-catNames = ['48', '32', 'Nitro', 'Retro', 'Bonus']
-fshdRun = fun.getRunFromID(fshdRunHistoryCml, id)
-catTimes = dta.mk8dCategoriesSplits(fshdRun)
-catStrg = [str(timedelta(seconds=catTimes[i]))[:-4] for i in catNames]
+catTimes = fun.getMK8DCategories(fshdRunHistoryCml, fshdRunID[-1])
