@@ -30,7 +30,7 @@ def plotSplitsHeatmap(
     ax.set_yticks(np.arange(runsNum))
     ax.set_xticks(np.arange(len(tNames)))
     # ... and label them with the respective list entries
-    runsNumStr = [str(i).zfill(2) for i in range(runsNum)]
+    runsNumStr = [str(i+1).zfill(2) for i in range(runsNum)]
     ylab = ['[{} id:{}]'.format(i[1], i[0]) for i in zip(rIds, runsNumStr)]
     ax.set_yticklabels(ylab, fontsize=5)
     ax.set_xticklabels(tNames, fontsize=7)
