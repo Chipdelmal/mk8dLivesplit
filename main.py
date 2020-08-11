@@ -1,92 +1,76 @@
 
-import plot
-import xmltodict
-import functions as fun
+import plotViolin as pv
+import plotTraces as pt
+import plotHeatmap as hea
+import auxFunctions as aux
+import dataFunctions as fun
+import plotCategories as cap
 import matplotlib.pylab as pl
-from datetime import timedelta
+import matplotlib.pyplot as plt
+
 
 (PATH, OUT, FILE) = (
         './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
         'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'
     )
-(DPI, PAD, TYP) = (250, .1, 'png')
-# Parse XML ###################################################################
-with open(PATH+FILE) as fd:
-    doc = xmltodict.parse(fd.read())
-# Violin ######################################################################
-tStats = fun.getSegmentStats(doc)
-fig = plot.plotTimings(
-        tStats, vNames=None,  # 'cups'
-        ylim=(70, 140)
-        # vNames=['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
+(DPI, PAD, TYP, VOFF) = (250, .1, 'png', 25)
+###############################################################################
+# Read File
+###############################################################################
+print('* Reading file...')
+seg = fun.getSegmentsFromFile(PATH+FILE)
+###############################################################################
+# Shape Runs Data
+###############################################################################
+print('* Calculating stats...')
+# Runs history and stats ------------------------------------------------------
+runsHistory = fun.getRunsDict(seg)
+runsStats = fun.getRunsStats(runsHistory)
+# Filter to finished runs -----------------------------------------------------
+fshdRunID = fun.getFinishedRunsId(seg)
+fshdRunHistory = fun.filterRunsDict(runsHistory, fshdRunID)
+fshdRunsStats = fun.getRunsStats(fshdRunHistory)
+# Cumulative history ----------------------------------------------------------
+fshdRunHistoryCml = fun.calcRunsCumulative(fshdRunHistory)
+fshdRunsStatsCml = fun.getRunsStats(fshdRunHistoryCml)
+# Filter runs -----------------------------------------------------------------
+# trace = fun.getRunFromID(fshdRunHistoryCml, 66)
+# minTimes = fun.getRunFromStatsOp(runsStats, op='Min')
+###############################################################################
+# Plot Data
+###############################################################################
+# Violin ----------------------------------------------------------------------
+print('* Plotting violins...')
+(fig, ax) = pv.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
+aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))
+plt.close(fig)
+# Traces ----------------------------------------------------------------------
+print('* Plotting traces...')
+(fig, ax) = pt.plotSegmentTraces(
+        fshdRunHistoryCml, runsStats, fshdRunsStatsCml, ylim=(-.65, .65)
     )
-fig.savefig(
-        '{}plotViolin.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
+aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
+plt.close(fig)
+# Heatmap ---------------------------------------------------------------------
+print('* Plotting heatmap...')
+(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=pl.cm.Purples)
+aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
+plt.close(fig)
+# MK8D Categories  ------------------------------------------------------------
+print('* Parsing category times...')
+(fig, ax) = cap.plotCategoryHeatmap(fshdRunHistoryCml, fshdRunID)
+aux.saveFig(fig, '{}plotCat.{}'.format(OUT, TYP), dpi=500)
+plt.close(fig)
+###############################################################################
+# Text Data
+###############################################################################
+# Timestaps -------------------------------------------------------------------
+print('* Parsing timestamps...')
+timpestamps = aux.getTracksTimestamps(
+        fshdRunHistoryCml, vOff=VOFF, ix=fshdRunID[-1]
     )
-# Traces ######################################################################
-tracesDta = fun.getSegmentTraces(doc, skip=0)
-(names, means, fSplit, cTimes, cTimesT, traces) = (
-        tracesDta['names'], tracesDta['means'],
-        tracesDta['final'], tracesDta['cmTimes'],
-        tracesDta['cmTimesT'], tracesDta['deviance']
-    )
-fig = plot.plotTraces(
-        traces, fSplit, cTimes, cTimesT, means, names, tStats, env=False,
-        yRange=(-.75, .75), cmap=pl.cm.Purples,
-        vNames=None  # ['Rainbow Road', 'N64 Rainbow Road', 'Big Blue']
-    )
-fig.savefig(
-        '{}plotTimes.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
-    )
-# Timings Table ###############################################################
-catDict = fun.timesForCategories(doc)
-catPD = fun.getTimesTableForCategories(catDict)
-mixLst = fun.getTableMinTimes(catDict)
-fig = plot.renderTable(catPD, minPos=mixLst, col_width=1.75)
-fig.savefig(
-        '{}tableRun.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
-    )
-# Tracks Table ################################################################
-(tTable, tDict) = fun.getTimesForTracks(doc)
-mixLstT = fun.getTrackTableMinTimes(tDict)
-catPDT = fun.getTimesTableForTracks(tTable)
-fig = plot.renderTable(catPDT, col_width=3.5, minPos=mixLstT)
-fig.savefig(
-        '{}tableTrack.{}'.format(OUT, TYP),
-        pad_inches=PAD, bbox_inches="tight", dpi=DPI
-    )
-# Video Summary ###############################################################
-catNames = list(catPD.columns)
-lastIx = catPD.shape[0]
-finalRun = catPD[catPD['Run'] == lastIx]
-catSummary = ['{}: \t{}'.format(i, list(finalRun.get(i))[0]) for i in catNames]
-runNum = len(catDict.get('48 Tracks'))
-timeRun = list(finalRun.get('48 Tracks'))[0]
-videoTitle = '[{}] MK8D {} (200cc, 48 tracks, no items, digital)'.format(
-        str(runNum).zfill(2), timeRun
-    )
-speedrunHandle = 'https://www.speedrun.com/user/chipdelmal'
-cmmnt = '200cc, 48 tracks, No items, Digital'
-tags = [
-        'mk8d', 'mario kart', 'speedrun', 'speed run', 'gaming', '48',
-        '200cc', 'no item', 'switch'
-    ]
-','.join(tags)
-txtOut = '{}\n{}\n{}\n{}\n{}'.format(
-        videoTitle, '\n'.join(catSummary[1:]),
-        speedrunHandle,
-        cmmnt, ', '.join(tags)
-    )
-
-with open(OUT+'youtubeSummary.txt', "w") as text_file:
-    text_file.write(txtOut)
-# Timestaps ###################################################################
-(ix, videoOffset) = (-1, 25)
-sTimes = [i[ix]+videoOffset/60 for i in cTimesT]
-sTimesFmt = [str(timedelta(minutes=time))[:7] for time in sTimes]
-tStamps = ['{}: {}'.format(i[0], i[1]) for i in zip(names[1:], sTimesFmt[:-1])]
-with open(OUT+'youtubeTimestamps.txt', "w") as text_file:
-    text_file.write('\n'.join(tStamps))
+aux.exportTxt('\n'.join(timpestamps), OUT+'youtubeTimestamps.txt')
+# Video Summary ---------------------------------------------------------------
+print('* Parsing summaries...')
+summary = fun.getYoutubeSummary(fshdRunHistoryCml, fshdRunID)
+aux.exportTxt('\n'.join(summary), OUT+'youtubeInfo.txt')
