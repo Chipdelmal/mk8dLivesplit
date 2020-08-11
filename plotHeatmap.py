@@ -40,6 +40,8 @@ def plotSplitsHeatmap(
             ax.get_xticklabels(), rotation_mode="anchor",
             rotation=90, ha="right", va="center"
         )
+    for j in range(runsNum):
+        plt.axhline(j+.5, color='w', linestyle='solid', lw=lineWidth/2)
     for i in range(len(tNames)):
         plt.axvline(i+.5, color=lineColor, linestyle='solid', lw=lineWidth)
     # Loop over data dimensions and create text annotations.

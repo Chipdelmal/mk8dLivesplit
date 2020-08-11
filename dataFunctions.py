@@ -141,14 +141,18 @@ def mk8dCategoriesSplits(fshdRun):
     tRetro = timeBetweenTracks(fshdRun, ('Rainbow Road', 'N64 Rainbow Road'))
     tBonus = timeBetweenTracks(fshdRun, ('N64 Rainbow Road', 'Big Blue'))
     catDict = {
-            '48': tFortyEight, '32': tThirtyTwo,
-            'Nitro': tNitro, 'Retro': tRetro, 'Bonus': tBonus
+            '48 Tracks': tFortyEight, '32 Tracks': tThirtyTwo,
+            'Nitro Tracks': tNitro, 'Retro Tracks': tRetro,
+            'Bonus Tracks': tBonus
         }
     return catDict
 
 
 def getMK8DCategories(fshdRunHistoryCml, id):
-    catNames = ['48', '32', 'Nitro', 'Retro', 'Bonus']
+    catNames = [
+            '48 Tracks', '32 Tracks', 'Nitro Tracks',
+            'Retro Tracks', 'Bonus Tracks'
+        ]
     fshdRun = getRunFromID(fshdRunHistoryCml, id)
     catTimes = mk8dCategoriesSplits(fshdRun)
     catStrg = {i: catTimes[i] for i in catNames}

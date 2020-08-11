@@ -1,15 +1,12 @@
 
-import plot
-import pandas as pd
-import functions as fu
 import plotViolin as pv
 import plotTraces as pt
 import plotHeatmap as hea
 import auxFunctions as aux
 import dataFunctions as fun
+import plotCategories as cap
 import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
-from datetime import timedelta
 
 
 (PATH, OUT, FILE) = (
@@ -70,27 +67,5 @@ timpestamps = aux.getTracksTimestamps(
 aux.exportTxt('\n'.join(timpestamps), OUT+'youtubeTimestamps.txt')
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
-catTimes = {i: fun.getMK8DCategories(fshdRunHistoryCml, i) for i in fshdRunID}
-
-ids = list(catTimes.keys())
-idx = range(len(ids))
-
-catNames = ['id', '48', '32', 'Nitro', 'Retro', 'Bonus']
-table = []
-for (i, ix) in enumerate(idx):
-    row = ['{} id:{}'.format(str(i+1).zfill(2), str(ids[i]).zfill(3))]
-    times = list(catTimes.get(ids[i]).values())
-    row.extend(times)
-    table.append(row)
-
-cats = {}
-for cat in catNames[1:]:
-    catList = [i[cat] for i in list(catTimes.values())]
-    cats.update({cat: catList})
-minList = fu.getTableMinTimes(cats)
-
-
-catPD = pd.DataFrame(table[0:], columns=catNames)
-for i in catNames[1:]:
-    catPD[i] = catPD[i].apply(lambda x: str(timedelta(seconds=(x)))[:-4])
-plot.renderTable(catPD, minPos=minList, col_width=1.75)
+(fig, ax) = cap.plotCategoryHeatmap(fshdRunHistoryCml, fshdRunID)
+aux.saveFig(fig, '{}plotCat.{}'.format(OUT, TYP), dpi=500)

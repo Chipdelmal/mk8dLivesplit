@@ -135,7 +135,7 @@ def plotSegmentTraces(
         )
     delta = bgStyle['bandSize']
     for i in range(0, tNum, delta):
-        if i % (2 * delta) == 0:
+        if i % (2*delta) == 0:
             (clr, alp) = (bgStyle['bandColorA'], bgStyle['bandAlphaA'])
         else:
             (clr, alp) = (bgStyle['bandColorB'], bgStyle['bandAlphaB'])
