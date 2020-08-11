@@ -175,3 +175,15 @@ def getYoutubeSummary(
     tags = 'mk8d, mario kart, speedrun, speed run, gaming, 48, 200cc, no item, switch'
     full = [title, categories, usr, tags]
     return full
+
+
+def getCategoriesTimes(fshdRunHistoryCml, fshdRunID):
+    fshdHist = [
+            fun.getMK8DCategories(fshdRunHistoryCml, id) for id in fshdRunID
+        ]
+    tracks = fshdHist[0].keys()
+    dictTracks = {}
+    for track in list(tracks):
+        t = {fshdRunID[j]: run[track]/60 for (j, run) in enumerate(fshdHist)}
+        dictTracks.update({track: t})
+    return dictTracks

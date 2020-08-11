@@ -33,6 +33,9 @@ fshdRunsStats = fun.getRunsStats(fshdRunHistory)
 # Cumulative history ----------------------------------------------------------
 fshdRunHistoryCml = fun.calcRunsCumulative(fshdRunHistory)
 fshdRunsStatsCml = fun.getRunsStats(fshdRunHistoryCml)
+# Categories history ----------------------------------------------------------
+catHistory = fun.getCategoriesTimes(fshdRunHistoryCml, fshdRunID)
+catStats = fun.getRunsStats(catHistory)
 # Filter runs -----------------------------------------------------------------
 # trace = fun.getRunFromID(fshdRunHistoryCml, 66)
 # minTimes = fun.getRunFromStatsOp(runsStats, op='Min')
@@ -59,7 +62,7 @@ plt.close(fig)
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
 (fig, ax) = cap.plotCategoryHeatmap(fshdRunHistoryCml, fshdRunID)
-aux.saveFig(fig, '{}plotCat.{}'.format(OUT, TYP), dpi=500)
+aux.saveFig(fig, '{}plotCategories.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 ###############################################################################
 # Text Data
