@@ -56,6 +56,11 @@ print('* Plotting heatmap...')
 (fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=pl.cm.Purples)
 aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
+# MK8D Categories  ------------------------------------------------------------
+print('* Parsing category times...')
+(fig, ax) = cap.plotCategoryHeatmap(fshdRunHistoryCml, fshdRunID)
+aux.saveFig(fig, '{}plotCat.{}'.format(OUT, TYP), dpi=500)
+plt.close(fig)
 ###############################################################################
 # Text Data
 ###############################################################################
@@ -65,7 +70,7 @@ timpestamps = aux.getTracksTimestamps(
         fshdRunHistoryCml, vOff=VOFF, ix=fshdRunID[-1]
     )
 aux.exportTxt('\n'.join(timpestamps), OUT+'youtubeTimestamps.txt')
-# MK8D Categories  ------------------------------------------------------------
-print('* Parsing category times...')
-(fig, ax) = cap.plotCategoryHeatmap(fshdRunHistoryCml, fshdRunID)
-aux.saveFig(fig, '{}plotCat.{}'.format(OUT, TYP), dpi=500)
+# Video Summary ---------------------------------------------------------------
+print('* Parsing summaries...')
+summary = fun.getYoutubeSummary(fshdRunHistoryCml, fshdRunID)
+aux.exportTxt('\n'.join(summary), OUT+'youtubeInfo.txt')

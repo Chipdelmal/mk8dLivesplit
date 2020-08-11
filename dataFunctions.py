@@ -1,6 +1,7 @@
 
 import statistics
 import auxFunctions as aux
+import dataFunctions as fun
 from xmltodict import parse
 from datetime import timedelta
 from collections import OrderedDict
@@ -157,3 +158,20 @@ def getMK8DCategories(fshdRunHistoryCml, id):
     catTimes = mk8dCategoriesSplits(fshdRun)
     catStrg = {i: catTimes[i] for i in catNames}
     return catStrg
+
+
+def getYoutubeSummary(
+            fshdRunHistoryCml, fshdRunID,
+            usr='https://www.speedrun.com/user/chipdelmal'
+        ):
+    (runID, runNum) = (fshdRunID[-1], str(len(fshdRunID)).zfill(2))
+    finishTime = fshdRunHistoryCml.get('Big Blue').get(runID)
+    label = '(200cc, 48 tracks, no items, digital)'
+    timeString = str(timedelta(seconds=finishTime))[2:-4]
+    title = '[{}] MK8D {} {}'.format(runNum, timeString, label)
+    catTimes = fun.getMK8DCategories(fshdRunHistoryCml, runID)
+    cStr = [cat+' - '+str(timedelta(seconds=catTimes[cat]))[2:-4] for cat in catTimes]
+    categories = '\n'.join(cStr)
+    tags = 'mk8d, mario kart, speedrun, speed run, gaming, 48, 200cc, no item, switch'
+    full = [title, categories, usr, tags]
+    return full
