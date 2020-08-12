@@ -1,4 +1,5 @@
 
+import colors as cl
 import numpy as np
 import auxFunctions as aux
 import dataFunctions as fun

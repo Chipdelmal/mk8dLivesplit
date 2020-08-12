@@ -1,4 +1,5 @@
 
+import colors as cl
 import plotViolin as pv
 import plotTraces as pt
 import plotHeatmap as hea
@@ -56,12 +57,14 @@ aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
 plt.close(fig)
 # Heatmap ---------------------------------------------------------------------
 print('* Plotting heatmap...')
-(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=pl.cm.Purples)
+(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=cl.LightBlue)
 aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
-(fig, ax) = cap.plotCategoryHeatmap(fshdRunHistoryCml, fshdRunID)
+(fig, ax) = cap.plotCategoryHeatmap(
+        fshdRunHistoryCml, fshdRunID, cmap=cl.LightBlue
+    )
 aux.saveFig(fig, '{}plotCategories.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 ###############################################################################

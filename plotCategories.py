@@ -19,7 +19,6 @@ def plotCategoryHeatmap(
         ]
     catTimes = [fun.getMK8DCategories(fshdRunHistoryCml, i) for i in fshdRunID]
     timesGrid = np.array([[run[c] for run in catTimes] for c in cat])
-    print(timesGrid)
     runsNum = len(timesGrid[0])
     # Empty array for the data
     nTimesArrays = np.empty(timesGrid.shape)
