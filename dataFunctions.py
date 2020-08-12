@@ -181,9 +181,12 @@ def getCategoriesTimes(fshdRunHistoryCml, fshdRunID):
     fshdHist = [
             fun.getMK8DCategories(fshdRunHistoryCml, id) for id in fshdRunID
         ]
-    tracks = fshdHist[0].keys()
+    catNames = [
+            '48 Tracks', '32 Tracks', 'Nitro Tracks',
+            'Retro Tracks', 'Bonus Tracks'
+        ]
     dictTracks = {}
-    for track in list(tracks):
+    for track in list(catNames):
         t = {fshdRunID[j]: run[track]/60 for (j, run) in enumerate(fshdHist)}
         dictTracks.update({track: t})
     return dictTracks

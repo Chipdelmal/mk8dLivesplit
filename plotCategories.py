@@ -13,9 +13,13 @@ def plotCategoryHeatmap(
             fontsize=12, rnd=2,
             fontColor='k', lineColor='k', lineWidth=.5
         ):
+    cat = [
+            '48 Tracks', '32 Tracks', 'Nitro Tracks',
+            'Retro Tracks', 'Bonus Tracks'
+        ]
     catTimes = [fun.getMK8DCategories(fshdRunHistoryCml, i) for i in fshdRunID]
-    cat = list(catTimes[0].keys())
     timesGrid = np.array([[run[c] for run in catTimes] for c in cat])
+    print(timesGrid)
     runsNum = len(timesGrid[0])
     # Empty array for the data
     nTimesArrays = np.empty(timesGrid.shape)
@@ -44,7 +48,7 @@ def plotCategoryHeatmap(
     for i in np.arange(len(cat)):
         for j in np.arange(runsNum):
             ax.text(
-                    i, j, str(timedelta(seconds=timesGrid[i, j]))[2:-4],
+                    i, j, str(timedelta(seconds=timesGrid[i, j]))[0:-4],
                     ha="center", va="center", color=fontColor,
                     fontsize=fontsize, rotation=0
                 )

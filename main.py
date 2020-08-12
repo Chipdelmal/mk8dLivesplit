@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
         './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
         'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'
     )
-(DPI, PAD, TYP, VOFF) = (250, .1, 'png', 25)
+(DPI, PAD, TYP, VOFF) = (250, .1, 'png', 30)
 ###############################################################################
 # Read File
 ###############################################################################
