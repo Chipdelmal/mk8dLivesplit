@@ -152,13 +152,38 @@ dictionary
 
 and they follow the same principles as the ones described before. All of the provided functions should work for other types of runs as long as they follow these standards.
 
-Additionally, the codebase provides functions to get the information of individual runs from their ID.
+Additionally, the code-base provides functions to get the information of individual runs from their ID.
 
 ## Known Issues and Needed Extensions
 
+As mentioned before, this code is provided "as is" in hopes that it is useful to the community. I'll try to fix some of the bugs and extend it if I have more time. I know the style can be greatly improved, and hopefully I'll get some of these extensions out in the future.
+
+### Finished runs limitation
+
+This is probably the most pressing issue. The cumulative times (traces plot) only shows the finished runs, which means that truncated attempts are filtered out. This can be fixed by not filtering the runs with the finished ids and padding their missing track times with **None** so that they maintain the same shape (length) as finished ones.
+
+
+### Categories Strict Naming
+
+Categories times calculations currently depend on tracks being named according to the following standard:
+
+'Mario Kart Stadium', 'Water Park', 'Sweet Sweet Canyon', 'Thwomp Ruins', 'Mario Circuit', 'Toad Harbor', 'Twisted Mansion', 'Shy Guy Falls', 'Sunshine Airport', 'Dolphin Shoals', 'Electrodrome', 'Mount Wario', 'Cloudtop Cruise', 'Bone-Dry Dunes', "Bowser's Castle", 'Rainbow Road', 'Wii Moo Moo Meadows', 'GBA Mario Circuit', 'DS Cheep Cheep Beach', "N64 Toad's Turnpike", 'GCN Dry Dry Desert', 'SNES Donut Plains 3', 'N64 Royal Raceway', '3DS DK Jungle', 'DS Wario Stadium', 'GCN Sherbet Land', '3DS Music Park', 'N64 Yoshi Valley', 'DS Tick-Tock Clock', '3DS Piranha Plant Slide', 'Wii Grumble Volcano', 'N64 Rainbow Road', 'GCN Yoshi Circuit', 'Excitebike Arena', 'Dragon Driftway', 'Mute City', "Wii Wario's Gold Mine", 'SNES Rainbow Road', 'Ice Ice Outpost', 'Hyrule Circuit', 'GCN Baby Park', 'GBA Cheese Land', 'Wild Woods', 'Animal Crossing', '3DS Neo Bowser City', 'GBA Ribbon Road', 'Super Bell Subway', 'Big Blue'
+
+This can be fixed by passing an argument to the category-related function (as opposed to current's hard-coded names); or, better yet, by getting names of the tracks by position in the run (instead of doing it directly by name).
+
+
+### Custom Color Palette Alpha Clash
+
+Violin and Traces plots currently have a bug in which passing a custom color palette with alpha values clashes with the additional alpha setting. This can be fixed by doing optional arguments in a standard way or adding clauses for exceptions.
+
+
+### Optional arguments for terminal call
+
+Right now the terminal call is extremely strict, but adding additional arguments shouldn't be too much of a hassle.
+
 #  Author
 
-For more information, read my [blogpost](https://chipdelmal.github.io/blog/).
+For more information, read my [blogpost](https://chipdelmal.github.io/blog/posts/mk8d3).
 
 <img src="https://raw.githubusercontent.com/Chipdelmal/WaveArt/master/media/pusheen.jpg" height="130px" align="middle"><br>
 
