@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 
 (PATH, OUT, FILE) = (
-        './dta/', '/home/chipdelmal/MEGAsync/MK8D/',
+        './dta/', './img/',
         'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'
     )
 (DPI, PAD, TYP, VOFF) = (250, .1, 'png', 30)
@@ -45,25 +45,35 @@ catStats = fun.getRunsStats(catHistory)
 ###############################################################################
 # Violin ----------------------------------------------------------------------
 print('* Plotting violins...')
-(fig, ax) = pv.plotSegmentViolins(runsHistory, runsStats, ylim=(78, 142))
+(fig, ax) = pv.plotSegmentViolins(
+        runsHistory, runsStats, ylim=(78, 142),
+        vStyle={
+                'color': pl.cm.Purples_r, 'alpha': .4,
+                'width': .65, 'lw': 3, 'lc': (0, 0, 0)
+            }
+    )
 aux.saveFig(fig, '{}plotViolin.{}'.format(OUT, TYP))
 plt.close(fig)
 # Traces ----------------------------------------------------------------------
 print('* Plotting traces...')
 (fig, ax) = pt.plotSegmentTraces(
-        fshdRunHistoryCml, runsStats, fshdRunsStatsCml, ylim=(-.65, .65)
+        fshdRunHistoryCml, runsStats, fshdRunsStatsCml, ylim=(-.65, .65),
+        traceStyle={
+                'alpha': .5, 'lw': 1.5,
+                'lcm': pl.cm.Purples_r, 'tcl': '#888888'
+            }
     )
 aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
 plt.close(fig)
 # Heatmap ---------------------------------------------------------------------
 print('* Plotting heatmap...')
-(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=cl.LightBlue)
+(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=cl.Navy)
 aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
 (fig, ax) = cap.plotCategoryHeatmap(
-        fshdRunHistoryCml, fshdRunID, cmap=cl.LightBlue
+        fshdRunHistoryCml, fshdRunID, cmap=cl.Navy
     )
 aux.saveFig(fig, '{}plotCategories.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
