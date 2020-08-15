@@ -8,10 +8,7 @@ Whilst the code works and is flexible, it does require a bit of know-how in Pyth
 To run the script, install the [required dependencies](#dependencies) and call the following command from the terminal:
 
 ```bash
-python main.py\
-    dataFile\
-    outputDirectory\
-    videoOffset\
+python main.py dataFile outputDirectory videoOffset
 ```
 
 where:
