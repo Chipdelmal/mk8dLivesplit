@@ -1,7 +1,7 @@
 # mk8dLivesplit
 
 This code generates split time distribution, traces and heatmaps plots for "Mario Kart 8 Deluxe" speedruns saved with [LiveSplit](https://one.livesplit.org/) (**.lss** format). It was coded as a side-project/hobby to analyze the progress and focus practice in my clumsy attempts at getting into speedrunning.
-
+Whilst the code works and is flexible, it does require a bit of know-how in Python to make slight changes if customization is desired.
 
 ## Example and Output
 
