@@ -37,7 +37,6 @@ def plotSegmentTraces(
     offsets = (.025, -.025)
     # Preprocess --------------------------------------------------------------
     tNames = list(fshdRunHistoryCml.keys())
-    print(tNames)
     tNum = len(tNames)
     runsNum = len(fshdRunHistoryCml.get(tNames[0]))
     runsIDs = list(fshdRunHistoryCml.get(tNames[0]).keys())
