@@ -167,10 +167,10 @@ def getYoutubeSummary(
     (runID, runNum) = (fshdRunID[-1], str(len(fshdRunID)).zfill(2))
     finishTime = fshdRunHistoryCml.get('Big Blue').get(runID)
     label = '(200cc, 48 tracks, no items, digital)'
-    timeString = str(timedelta(seconds=finishTime))[2:-4]
+    timeString = str(timedelta(seconds=finishTime))[:-4]
     title = '[{}] MK8D {} {}'.format(runNum, timeString, label)
     catTimes = fun.getMK8DCategories(fshdRunHistoryCml, runID)
-    cStr = [cat+' - '+str(timedelta(seconds=catTimes[cat]))[2:-4] for cat in catTimes]
+    cStr = [cat+' - '+str(timedelta(seconds=catTimes[cat]))[:-4] for cat in catTimes]
     categories = '\n'.join(cStr)
     tags = 'mk8d, mario kart, speedrun, speed run, gaming, 48, 200cc, no item, switch'
     full = [title, categories, usr, tags]
