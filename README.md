@@ -101,9 +101,60 @@ pip install matplotlib
 pip install xmltodict
 ```
 
-##  Documentation, Extensions and Known Issues
+##  Documentation
 
+Unfortunately, I don't have enough time to document the code (this being a hobby and having a lot of work lately), but I will explain briefly the standards followed in case anyone is interested in using or extending it.
 
+Most of the functionality revolves around using **OrderedDict** objects to re-shape and transform the information. The general structure is:
+
+```
+dictionary
+    * Segment Name 1
+        * Run Id 1: segment time
+        * Run Id 2: segment time
+        ...
+        * Run Id N: segment time
+    * Segment Name 2
+        * Run Id 1: segment time
+        * Run Id 2: segment time
+        ...
+        * Run Id N: segment time
+    ...
+    * Segment Name Z
+        * Run Id 1: segment time
+        * Run Id 2: segment time
+        ...
+        * Run Id N: segment time
+```
+
+For the **runsHistory** object, each segment contains all of the runs and the segment time in that split. The **fshdRunHistoryCml**, in contrast, contains all the finished runs (full runs) times and stores the cumulative time of the run.
+
+The **runsStats** and **fshdRunsStatsCml** objects have the following structure:
+
+```
+dictionary
+    * Segment Name 1
+        * 'Min': Best time
+        * 'Max': Worst time
+        * 'Mean': Mean
+        * 'Median': Median
+        * 'SD': Standing variation
+        * 'Variance': Variance
+    ...
+    * Segment Name Z
+        * 'Min': Best time
+        * 'Max': Worst time
+        * 'Mean': Mean
+        * 'Median': Median
+        * 'SD': Standing variation
+        * 'Variance': Variance
+```
+
+and they follow the same principles as the ones described before. All of the provided functions should work for other types of runs as long as they follow these standards.
+
+Additionally, the codebase provides functions to get the information of individual runs from their ID.
+
+## Known Issues and Needed Extensions
 
 #  Author
 
