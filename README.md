@@ -1,12 +1,31 @@
 # mk8dLivesplit
 
-This code generates split time distribution, traces and heatmaps plots for Mario Kart 8 Deluxe speedruns saved with [LiveSplit](https://one.livesplit.org/) (**.lss** format). Additionally, It exports
+This code generates split time distribution, traces and heatmaps plots for Mario Kart 8 Deluxe speedruns saved with [LiveSplit](https://one.livesplit.org/) (**.lss** format).
 
 
 ## Example and Output
 
+To run the script, install the [required dependencies](#dependencies) and call the following command from the terminal:
+
 ```bash
-python main.py
+python main.py\
+    dataFile\
+    outputDirectory\
+    videoOffset\
+```
+
+where:
+* *dataFile* is the path to the **lss** file
+* *outputDirectory* is path where the output files should be exported
+* *videoOffset* is the offset to the beginning of the run (set to 0 if timestamps are not needed)
+
+An example on how to call the script would be:
+
+```bash
+python main.py\
+    './dta/Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'\
+    ./img/\
+    32\
 ```
 
 ### Splits Violins

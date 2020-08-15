@@ -1,4 +1,5 @@
 
+import sys
 import colors as cl
 import plotViolin as pv
 import plotTraces as pt
@@ -10,16 +11,17 @@ import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
 
 
-(PATH, OUT, FILE) = (
-        './dta/', './img/',
-        'Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss'
-    )
+(FILE, OUT, VOFF) = (sys.argv[1], sys.argv[2], sys.argv[3])
 (DPI, PAD, TYP, VOFF) = (250, .1, 'png', 30)
+# (FILE, OUT) = (
+#        './dta/Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss',
+#        './img/'
+#    )
 ###############################################################################
 # Read File
 ###############################################################################
 print('* Reading file...')
-seg = fun.getSegmentsFromFile(PATH+FILE)
+seg = fun.getSegmentsFromFile(FILE)
 ###############################################################################
 # Shape Runs Data
 ###############################################################################
