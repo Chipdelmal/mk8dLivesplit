@@ -12,11 +12,11 @@ import matplotlib.pyplot as plt
 
 
 (FILE, OUT, VOFF) = (sys.argv[1], sys.argv[2], sys.argv[3])
-(DPI, PAD, TYP, VOFF) = (250, .1, 'png', 30)
-# (FILE, OUT) = (
-#        './dta/Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss',
-#        './img/'
-#    )
+# (DPI, PAD, TYP, VOFF) = (250, .1, 'png', 30)
+(FILE, OUT) = (
+        './dta/Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss',
+        '/home/chipdelmal/MEGAsync/MK8D/'
+    )
 ###############################################################################
 # Read File
 ###############################################################################
@@ -69,13 +69,13 @@ aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
 plt.close(fig)
 # Heatmap ---------------------------------------------------------------------
 print('* Plotting heatmap...')
-(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=cl.Navy)
+(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=cl.Purple)
 aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
 (fig, ax) = cap.plotCategoryHeatmap(
-        fshdRunHistoryCml, fshdRunID, cmap=cl.Navy
+        fshdRunHistoryCml, fshdRunID, cmap=cl.Purple
     )
 aux.saveFig(fig, '{}plotCategories.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
