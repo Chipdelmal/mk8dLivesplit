@@ -49,7 +49,7 @@ def getTracksTimestamps(fshdRunHistoryCml, vOff=0, ix=-1):
     tNames = list(fshdRunHistoryCml.keys())
     names.extend(tNames)
     splits = [vOff]
-    mins = [(vOff+lastRun[i])/60 for i in tNames]
+    mins = [(vOff+float(lastRun[i]))/60 for i in tNames]
     splits.extend(mins)
     sTimesFmt = [str(timedelta(minutes=time))[:7] for time in splits]
     itr = zip(names[1:], sTimesFmt[:-1])

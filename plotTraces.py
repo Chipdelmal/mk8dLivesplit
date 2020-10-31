@@ -74,12 +74,12 @@ def plotSegmentTraces(
         ax.plot(
                 trace,
                 linewidth=traceStyle['lw'], marker='.', markersize=0,
-                color=colors[i], alpha=traceStyle['alpha']
+                color=colors[i], alpha=traceStyle['alpha'], zorder=0
             )
     ax.plot(
             minTrace,
             linewidth=minStyle['lw'], color=minStyle['lc'],
-            alpha=minStyle['alpha']
+            alpha=minStyle['alpha'], zorder=5
         )
     # Plot violins ------------------------------------------------------------
     bp = ax.violinplot(

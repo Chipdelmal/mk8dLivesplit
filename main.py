@@ -11,11 +11,12 @@ import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
 
 
-(FILE, OUT, VOFF) = (sys.argv[1], sys.argv[2], sys.argv[3])
+# (FILE, OUT, VOFF) = (sys.argv[1], sys.argv[2], sys.argv[3])
 # (DPI, PAD, TYP, VOFF) = (250, .1, 'png', 30)
-(FILE, OUT) = (
+TYP = 'png'
+(FILE, OUT, VOFF) = (
         './dta/Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss',
-        '/home/chipdelmal/MEGAsync/MK8D/'
+        '/home/chipdelmal/Documents/MK8D/Livesplit/', 35
     )
 ###############################################################################
 # Read File
@@ -62,7 +63,7 @@ print('* Plotting traces...')
         fshdRunHistoryCml, runsStats, fshdRunsStatsCml, ylim=(-.65, .65),
         traceStyle={
                 'alpha': .5, 'lw': 1.5,
-                'lcm': pl.cm.Purples_r, 'tcl': '#888888'
+                'lcm': pl.cm.Purples, 'tcl': '#888888'
             }
     )
 aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
