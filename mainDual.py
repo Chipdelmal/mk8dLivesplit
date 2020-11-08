@@ -11,6 +11,8 @@ import dataFunctions as fun
 import plotCategories as cap
 import matplotlib.pylab as pl
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+
 
 
 # (FILE, OUT, VOFF) = (sys.argv[1], sys.argv[2], sys.argv[3])
@@ -55,10 +57,24 @@ for hist in range(len(runsHS)):
                 ignore_index=True
             )
 # Plot ------------------------------------------------------------------------
-fig = plt.figure(figsize=(24, 12))
-ax = sns.violinplot(
-    x="Time", y="Track", hue="Version",
-    data=df, palette="Set2", split=True,
-    inner="stick"
-)
-aux.saveFig(fig, '{}violinSplits.{}'.format(OUT, TYP), dpi=500)
+# fig = plt.figure(figsize=(24, 12))
+# ax = sns.violinplot(
+#     x="Time", y="Track", hue="Version",
+#     data=df, palette="Set2", split=True,
+#     inner="stick"
+# )
+# aux.saveFig(fig, '{}violinSplits.{}'.format(OUT, TYP), dpi=500)
+# Plot ------------------------------------------------------------------------
+fig = go.Figure()
+fig.add_trace(go.Violin(x=df['Track'][ df['Version'] == 'Digital' ],
+                        y=df['Time'][ df['Version'] == 'Digital' ],
+                        legendgroup='Yes', scalegroup='Yes', name='Yes',
+                        side='negative',
+                        line_color='blue')
+             )
+fig.add_trace(go.Violin(x=df['Track'][ df['Version'] == 'Cartridge' ],
+                        y=df['Time'][ df['Version'] == 'Cartridge' ],
+                        legendgroup='No', scalegroup='No', name='No',
+                        side='positive',
+                        line_color='orange')
+             )
