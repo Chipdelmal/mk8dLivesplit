@@ -10,6 +10,12 @@ from collections import OrderedDict
 ###############################################################################
 # Runs
 ###############################################################################
+def getRunHistStats(segments):
+    runsHistory = fun.getRunsDict(segments)
+    runsStats = fun.getRunsStats(runsHistory)
+    return (runsHistory, runsStats)
+
+
 def getSegments(doc):
     return doc['Run']['Segments']['Segment']
 
