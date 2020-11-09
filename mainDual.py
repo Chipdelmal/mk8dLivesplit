@@ -68,16 +68,16 @@ fig = go.Figure()
 fig.add_trace(go.Violin(
     x=df['Track'][df['Version']== ver[0]],
     y=df['Time'][df['Version']==ver[0]],
-    legendgroup=ver[0], 
+    legendgroup=ver[0],
     scalegroup=ver[0], name=ver[0], side='negative',
-    line_color='blue', points=False
+    line_color='blue', points=False, spanmode='hard'
 ))
 fig.add_trace(go.Violin(
     x=df['Track'][df['Version']==ver[1]],
     y=df['Time'][df['Version']==ver[1]],
     legendgroup=ver[1], 
     scalegroup=ver[1], name=ver[1], side='positive',
-    line_color='purple', points=False
+    line_color='purple', points=False, spanmode='hard'
 ))
 fig.update_traces(
     orientation='v', 
@@ -92,3 +92,5 @@ fig.update_xaxes(range=[-.5, len(tracks)-.5])
 # fig.show()
 fig.write_html('{}violins.html'.format(OUT))
 
+
+help(go.Violin)
