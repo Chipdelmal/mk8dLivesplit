@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 TYP = 'png'
 (FILE, OUT, VOFF) = (
         './dta/Mario Kart 8 Deluxe - 48 Tracks (200cc, Digital, No Items).lss',
-        '/home/chipdelmal/Documents/MK8D/Livesplit/', 35
+        '/home/chipdelmal/Documents/MK8D/Livesplit/', 30
     )
 ###############################################################################
 # Read File
@@ -51,7 +51,7 @@ print('* Plotting violins...')
 (fig, ax) = pv.plotSegmentViolins(
         runsHistory, runsStats, ylim=(78, 142),
         vStyle={
-                'color': pl.cm.Purples_r, 'alpha': .4,
+                'color': pl.cm.Purples.reversed(), 'alpha': .4,
                 'width': .65, 'lw': 3, 'lc': (0, 0, 0)
             }
     )
@@ -70,13 +70,13 @@ aux.saveFig(fig, '{}plotTraces.{}'.format(OUT, TYP))
 plt.close(fig)
 # Heatmap ---------------------------------------------------------------------
 print('* Plotting heatmap...')
-(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=cl.Purple)
+(fig, ax) = hea.plotSplitsHeatmap(fshdRunHistory, cmap=pl.cm.Purples)
 aux.saveFig(fig, '{}plotHeat.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)
 # MK8D Categories  ------------------------------------------------------------
 print('* Parsing category times...')
 (fig, ax) = cap.plotCategoryHeatmap(
-        fshdRunHistoryCml, fshdRunID, cmap=cl.Purple
+        fshdRunHistoryCml, fshdRunID, cmap=pl.cm.Purples
     )
 aux.saveFig(fig, '{}plotCategories.{}'.format(OUT, TYP), dpi=500)
 plt.close(fig)

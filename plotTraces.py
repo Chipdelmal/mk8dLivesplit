@@ -19,7 +19,7 @@ traceStyle = {
 minStyle = {'alpha': .75, 'lw': 2, 'lc': '#ff006e'}
 bgStyle = {
         'bandSize': 4,
-        'bandColorA': 'blue', 'bandAlphaA': 0.025,
+        'bandColorA': '#6347ff', 'bandAlphaA': 0.025,
         'bandColorB': 'white', 'bandAlphaB': 0.025,
         'gridColor': (.3, .3, .3), 'gridAlpha': .05,
         'xtickSize': 22.5, 'ytickSize': 22.5, 'labelsSize': 75
@@ -140,7 +140,7 @@ def plotSegmentTraces(
             (clr, alp) = (bgStyle['bandColorA'], bgStyle['bandAlphaA'])
         else:
             (clr, alp) = (bgStyle['bandColorB'], bgStyle['bandAlphaB'])
-        ax.axvspan(i+0.5, i+delta+0.5, zorder=0, color=clr, alpha=alp)
+        ax.axvspan(i+0.5, i+delta+0.5, zorder=-2, color=clr, alpha=alp)
     # Labels ------------------------------------------------------------------
     plt.xticks(fontsize=bgStyle['xtickSize'])
     plt.yticks(fontsize=bgStyle['ytickSize'], rotation=0)
