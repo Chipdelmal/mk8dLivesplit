@@ -32,7 +32,6 @@ print('* Reading file...')
 ###############################################################################
 print('* Calculating stats...')
 runsHS = [fun.getRunHistStats(i) for i in (segD, segC)]
-runsHS
 ###############################################################################
 # Plot Data
 ###############################################################################
@@ -66,7 +65,9 @@ for hist in range(len(runsHS)):
 #     inner="stick"
 # )
 # aux.saveFig(fig, '{}violinSplits.{}'.format(OUT, TYP), dpi=500)
-# Plot ------------------------------------------------------------------------
+# #############################################################################
+# Plot
+# #############################################################################
 fig = go.Figure()
 fig.add_trace(go.Violin(
     x=df['Track'][df['Version']== ver[0]],
@@ -99,4 +100,10 @@ fig.update_xaxes(range=[-.5, len(tracks)-.5])
 # fig.show()
 fig.write_html('{}violins.html'.format(OUT))
 
-df
+
+
+fltr = zip(df['Track'] == 'Big Blue', df['Version'] == 'Digital')
+fshdID = list(df[[all(i) for i in fltr]].get('ID'))
+
+tracks = list(df['Track'].unique()) 
+tracks
