@@ -32,11 +32,12 @@ print('* Reading file...')
 ###############################################################################
 print('* Calculating stats...')
 runsHS = [fun.getRunHistStats(i) for i in (segD, segC)]
+runsHS
 ###############################################################################
 # Plot Data
 ###############################################################################
 # Empty dataframe -------------------------------------------------------------
-columns = ['Track', 'Time', 'Version']
+columns = ['Track', 'ID', 'Time', 'Version']
 ver = ['Digital', 'Cartridge']
 df = pd.DataFrame(columns=columns)
 # Populate dataframe ----------------------------------------------------------
@@ -45,11 +46,13 @@ for hist in range(len(runsHS)):
     tracks = list(tracksHist.keys())
     # Append entries ----------------------------------------------------------
     for track in tracks:
+        ids = list(tracksHist[track].keys())
         times = list(tracksHist[track].values())
-        for time in times:
+        for (key, time) in zip(ids, times):
             df = df.append(
                 {
-                    'Track': track, 
+                    'Track': track,
+                    'ID': int(key),
                     'Time': time, 
                     'Version': ver[hist]
                 }, 
@@ -68,29 +71,32 @@ fig = go.Figure()
 fig.add_trace(go.Violin(
     x=df['Track'][df['Version']== ver[0]],
     y=df['Time'][df['Version']==ver[0]],
-    legendgroup=ver[0],
+    legendgroup=ver[0], line={'width': .75},
     scalegroup=ver[0], name=ver[0], side='negative',
     line_color='blue', points=False, spanmode='hard'
 ))
 fig.add_trace(go.Violin(
     x=df['Track'][df['Version']==ver[1]],
     y=df['Time'][df['Version']==ver[1]],
-    legendgroup=ver[1], 
+    legendgroup=ver[1], line={'width': .75},
     scalegroup=ver[1], name=ver[1], side='positive',
     line_color='purple', points=False, spanmode='hard'
 ))
 fig.update_traces(
-    orientation='v', 
-    meanline_visible=True, width=1, points=False
+    orientation='v', meanline_visible=True, width=1, points=False
 )
 fig.update_layout(
-    violingap=.5, violinmode='overlay', 
-    autosize=True, width=1250, height=500,
-    margin=go.layout.Margin(l=1, r=1, b=1, t=1, pad=0)
+    violingap=0, violinmode='overlay', hovermode="x",
+    autosize=True, width=1250, height=600,
+    margin=go.layout.Margin(l=1, r=1, b=1, t=1, pad=0),
+    legend=dict(
+        yanchor="top", y=0.99,
+        xanchor="left", x=0.01
+    ),
+    hoverlabel=dict(font_size=12)
 )
 fig.update_xaxes(range=[-.5, len(tracks)-.5])
 # fig.show()
 fig.write_html('{}violins.html'.format(OUT))
 
-
-help(go.Violin)
+df
