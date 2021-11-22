@@ -51,7 +51,7 @@ print('* Plotting violins...')
 (fig, ax) = pv.plotSegmentViolins(
         runsHistory, runsStats, ylim=(78, 142),
         vStyle={
-                'color': pl.cm.Purples.reversed(), 'alpha': .4,
+                'color': pl.cm.Purples.reversed(), 'alpha': .8,
                 'width': .65, 'lw': 3, 'lc': (0, 0, 0)
             }
     )

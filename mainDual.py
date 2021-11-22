@@ -23,7 +23,7 @@ TYP = 'png'
     '/home/chipdelmal/Documents/MK8D/Livesplit/', 35
 )
 ###############################################################################
-# Read File
+# Read Files
 ###############################################################################
 print('* Reading file...')
 (segD, segC) = [fun.getSegmentsFromFile(i) for i in (FILE_D, FILE_C)]
@@ -32,31 +32,10 @@ print('* Reading file...')
 ###############################################################################
 print('* Calculating stats...')
 runsHS = [fun.getRunHistStats(i) for i in (segD, segC)]
+runsDF = fun.getRunsDataframe(runsHS)
 ###############################################################################
 # Plot Data
 ###############################################################################
-# Empty dataframe -------------------------------------------------------------
-columns = ['Track', 'ID', 'Time', 'Version']
-ver = ['Digital', 'Cartridge']
-df = pd.DataFrame(columns=columns)
-# Populate dataframe ----------------------------------------------------------
-for hist in range(len(runsHS)):
-    tracksHist = runsHS[hist][0]
-    tracks = list(tracksHist.keys())
-    # Append entries ----------------------------------------------------------
-    for track in tracks:
-        ids = list(tracksHist[track].keys())
-        times = list(tracksHist[track].values())
-        for (key, time) in zip(ids, times):
-            df = df.append(
-                {
-                    'Track': track,
-                    'ID': int(key),
-                    'Time': time, 
-                    'Version': ver[hist]
-                }, 
-                ignore_index=True
-            )
 # Plot ------------------------------------------------------------------------
 # fig = plt.figure(figsize=(24, 12))
 # ax = sns.violinplot(
@@ -65,9 +44,10 @@ for hist in range(len(runsHS)):
 #     inner="stick"
 # )
 # aux.saveFig(fig, '{}violinSplits.{}'.format(OUT, TYP), dpi=500)
-# #############################################################################
-# Plot
-# #############################################################################
+# Web Violin ------------------------------------------------------------------
+df = runsDF
+ver = ('Digital', 'Digital')
+tracks = df['Track'].unique()
 fig = go.Figure()
 fig.add_trace(go.Violin(
     x=df['Track'][df['Version']== ver[0]],
@@ -99,11 +79,22 @@ fig.update_layout(
 fig.update_xaxes(range=[-.5, len(tracks)-.5])
 # fig.show()
 fig.write_html('{}violins.html'.format(OUT))
+# Web Traces ------------------------------------------------------------------
+versions = ['Digital', 'Cartridge']
+verIx = versions[0]
+# Version loop ----------------------------------------------------------------
+fshdIDs = fun.getFinishedRunsIDs(runsDF, finalTrack='Big Blue', version=verIx)
+dfOut = pd.DataFrame(columns=['Track', 'ID', 'Time', 'Version'])
+tracks = list(runsDF['Track'].unique()) 
+# Tracks loop -----------------------------------------------------------------
+tracks 
+track = tracks[0]
+fltr = zip(
+    runsDF['Track'] == track, 
+    runsDF['Version'] == 'Digital', 
+    [runsDF['ID'].iloc[i] in set(fshdID) for i in range(df.shape[0])]
+)
+print(runsDF[[all(i) for i in fltr]])
+dfOut = df.append(runsDF[[all(i) for i in fltr]])
 
 
-
-fltr = zip(df['Track'] == 'Big Blue', df['Version'] == 'Digital')
-fshdID = list(df[[all(i) for i in fltr]].get('ID'))
-
-tracks = list(df['Track'].unique()) 
-tracks

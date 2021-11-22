@@ -1,5 +1,6 @@
 
 import statistics
+import pandas as pd
 import auxFunctions as aux
 import dataFunctions as fun
 from xmltodict import parse
@@ -196,3 +197,61 @@ def getCategoriesTimes(fshdRunHistoryCml, fshdRunID):
         t = {fshdRunID[j]: run[track]/60 for (j, run) in enumerate(fshdHist)}
         dictTracks.update({track: t})
     return dictTracks
+
+
+# #############################################################################
+# Dataframe structured functions
+# #############################################################################
+def getRunsDataframe(
+    runsHS, 
+    versions=('Cartridge', 'Digital')
+):
+    columns = ['Track', 'ID', 'Time', 'Version']
+    df = pd.DataFrame(columns=columns)
+    # Populate dataframe ----------------
+    for hist in range(len(runsHS)):
+        tracksHist = runsHS[hist][0]
+        tracks = list(tracksHist.keys())
+        # Append entries ----------------------------------------------------------
+        for track in tracks:
+            ids = list(tracksHist[track].keys())
+            times = list(tracksHist[track].values())
+            for (key, time) in zip(ids, times):
+                df = df.append(
+                    {
+                        'Track': track,
+                        'ID': int(key),
+                        'Time': time, 
+                        'Version': versions[hist]
+                    }, ignore_index=True
+                )
+    return df
+
+
+def getFinishedRunsIDs(
+    runsDF, 
+    finalTrack='Big Blue', 
+    version='Digital'
+):
+    fltr = zip(
+        runsDF['Track'] == finalTrack, 
+        runsDF['Version'] == version
+    ) 
+    fshdID = list(runsDF[[all(i) for i in fltr]].get('ID'))
+    return set(fshdID)
+
+
+TRACKS = [
+    'Mario Kart Stadium', 'Water Park', 'Sweet Sweet Canyon', 'Thwomp Ruins',
+    'Mario Circuit', 'Toad Harbor', 'Twisted Mansion', 'Shy Guy Falls',
+    'Sunshine Airport', 'Dolphin Shoals', 'Electrodrome', 'Mount Wario',
+    'Cloudtop Cruise', 'Bone-Dry Dunes', "Bowser's Castle", 'Rainbow Road',
+    'Wii Moo Moo Meadows', 'GBA Mario Circuit', 'DS Cheep Cheep Beach', "N64 Toad's Turnpike",
+    'GCN Dry Dry Desert', 'SNES Donut Plains 3', 'N64 Royal Raceway', '3DS DK Jungle',
+    'DS Wario Stadium', 'GCN Sherbet Land', '3DS Music Park', 'N64 Yoshi Valley',
+    'DS Tick-Tock Clock', '3DS Piranha Plant Slide', 'Wii Grumble Volcano', 'N64 Rainbow Road',
+    'GCN Yoshi Circuit', 'Excitebike Arena', 'Dragon Driftway', 'Mute City',
+    "Wii Wario's Gold Mine", 'SNES Rainbow Road', 'Ice Ice Outpost', 'Hyrule Circuit',
+    'GCN Baby Park', 'GBA Cheese Land', 'Wild Woods', 'Animal Crossing',
+    '3DS Neo Bowser City', 'GBA Ribbon Road', 'Super Bell Subway','Big Blue'
+]
