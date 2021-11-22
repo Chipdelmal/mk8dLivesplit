@@ -31,7 +31,7 @@ print('* Reading file...')
 # Shape Runs Data
 ###############################################################################
 print('* Calculating stats...')
-runsHS = [fun.getRunHistStats(i) for i in (segD, segC)]
+runsHS = [fun.getRunHistStats(i) for i in (segC, segD)]
 runsDF = fun.getRunsDataframe(runsHS)
 ###############################################################################
 # Plot Data
@@ -46,7 +46,7 @@ runsDF = fun.getRunsDataframe(runsHS)
 # aux.saveFig(fig, '{}violinSplits.{}'.format(OUT, TYP), dpi=500)
 # Web Violin ------------------------------------------------------------------
 df = runsDF
-ver = ('Digital', 'Digital')
+ver = ('Digital', 'Cartridge')
 tracks = df['Track'].unique()
 fig = go.Figure()
 fig.add_trace(go.Violin(
@@ -92,7 +92,7 @@ track = tracks[0]
 fltr = zip(
     runsDF['Track'] == track, 
     runsDF['Version'] == 'Digital', 
-    [runsDF['ID'].iloc[i] in set(fshdID) for i in range(df.shape[0])]
+    [runsDF['ID'].iloc[i] in set(fshdIDs) for i in range(df.shape[0])]
 )
 print(runsDF[[all(i) for i in fltr]])
 dfOut = df.append(runsDF[[all(i) for i in fltr]])
